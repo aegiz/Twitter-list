@@ -7,52 +7,47 @@ Hull.init({
 });
 
  // On auth success
-var $facebook_login = $('.facebook-login'),
-    $twitter_login = $(".twitter-login");
+var $twitter_login = $(".twitter-login");
 var refreshButton = function() {
    var user = Hull.currentUser();
    if (user) {
-      $facebook_login.html("Connected as " + user.name + ". Logout");
       $twitter_login.html("Connected as " + user.name + ". Logout");
    } else {
-      $facebook_login.html("Login with Facebook");
       $twitter_login.html("Login with Twitter");
    }
 }
-// Let's initialize it when you app is loaded
-/*Hull.on('hull.init', function() {
-   refreshButton();
-   $facebook_login.on('click', function() {
-      if (Hull.currentUser()) {
-         Hull.logout();
-      } else {
-         Hull.login({provider:'facebook'});
-         postComment();
-      }
-   });
-   $twitter_login.on('click', function() {
-      debugger;
-      if (Hull.currentUser()) {
-         Hull.logout();
-      } else {
-         Hull.login({provider:'twitter'}).then(function(me){
-           debugger; 
-         });
-      }
-   });
-
-   
-});*/
 
 Hull.on('hull.auth.login', function(me) {
-   Hull.api({
-     provider:'twitter',
-     path:'/statuses/home_timeline'
-   },function(result){
-     console.log('This is the result', result)
-   });
+   
 })
 
+// ANGULAR :
+
+var twitterListApp = angular.module("twitterListApp", []);
+
+
+/*twitterListApp.directive("getTweets", function(){
+   return {
+      restrict: "E",
+   }
+});*/
+
+
+twitterListApp.controller('TweetCtrl', ['$scope', function($scope){
+   var TweetCtrl = this;
+   $scope.displayTweets = function(){
+      Hull.api({
+        provider:'twitter',
+        path:'/statuses/home_timeline'
+      },function(result){
+        console.log('This is the result', result);
+        for (var i = result.length - 1; i >= 0; i--) {
+           TweetCtrl.tweets = result[i];
+        };
+      });
+   }
+   
+}]);
 
 // Let's react to all events prefixed by 'hull.auth'
 Hull.on('hull.auth.*', refreshButton);

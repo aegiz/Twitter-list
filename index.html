@@ -3,73 +3,31 @@
 <head>
    <meta charset="utf-8">
 
-   <title>Project</title>
+   <title>Twitter list</title>
    <meta name="description" content="Hullo, world!">
    <meta name="viewport" content="width=device-width">
-
-   <!-- Those are optional too, just here for the demo. Remove if you don't need them -->
    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
    <link href="//hullstrap.s3.amazonaws.com/stylesheets/hullstrap.css" media="screen" rel="stylesheet" type="text/css" />
    <link rel="stylesheet" type="text/css" href="css/styles.css">
    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-   <!-- Now the real stuff begings. This is mandatory -->
    <script src="https://hull-js.s3.amazonaws.com/0.8.43/hull.js"></script>
+   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
    
 </head>
 <body>
-
-   <div class="calmdown">
-      <div data-hull-component='login/profile@hull' data-hull-provider="twitter" class="twitter-login"></div>
-   </div>
-   <div class="container">
-      <div class="col-md-6">
-         <div id="error" class="hidden">
-            <h3>Something went wrong!</h3>
-            <p>
-               It looks like an error occured when trying to create the test comment or log you in. Here are more details:
-            </p>
-            <pre><code id='error_output'></code></pre>
-         </div>
-         <div id="success" class="hidden">
-            <h3>Hull is ready!</h3>
-            <p>
-               We signed up a test user with the following credentials and logged you in with it.
-            </p>
-
-            <ul>
-               <li> <strong>email</strong>
-                  : user@host.com
-               </li>
-               <li> <strong>password</strong>
-                  : test_password
-               </li>
-            </ul>
-
-            <pre>
-               <code>Hull.signup({
-              email:'user@host.com',
-              password:'test_password',
-              name: 'Test user',
-              picture: 'http://placehold.it/100x100'
-            })</code>
-            </pre>
-
-            <p>
-               Then we created your first comment on the
-               <a href='http://hull.io/docs/social/entities'>Entity</a>
-               "TestObject" with this code:
-            </p>
-            <pre>
-               <code>var testObjectEntity = Hull.util.entity.encode('TestObject');
-                  Hull.api(testObjectEntity + '/comments', 'post', {
-                      description: 'Hullo, world',
-                  });
-               </code>
-            </pre>
-            <p>Here is the response:</p>
-            <pre><code id='success_output'></code></pre>
-         </div>
+   <div class="main-container" ng-app="twitterListApp">
+      <div class="calmdown">
+         <div data-hull-component='login/profile@hull' data-hull-provider="twitter" class="twitter-login"></div>
+      </div>
+      <div class="tweets-container">
+         <div ng-controller="TweetCtrl as tweetCtrl">
+            <table>
+              <tr ng-repeat="tweet in tweetCtrl.tweets">
+                  <td>{{tweet.text}}</td>
+              </tr>
+            </table>
+          </div>
       </div>
    </div>
    <script type="text/javascript" src="js/myscripts.js"></script>
