@@ -6,20 +6,6 @@ Hull.init({
    console.log("Hull is initialized for app", hull.config());
 });
 
- // On auth success
-var $twitter_login = $(".twitter-login");
-var refreshButton = function() {
-   var user = Hull.currentUser();
-   if (user) {
-      $twitter_login.html("Connected as " + user.name + ". Logout");
-   } else {
-      $twitter_login.html("Login with Twitter");
-   }
-}
-
-Hull.on('hull.auth.login', function(me) {
-   
-})
 
 // ANGULAR :
 
@@ -35,7 +21,23 @@ var twitterListApp = angular.module("twitterListApp", []);
 
 twitterListApp.controller('TweetCtrl', ['$scope', function($scope){
    var TweetCtrl = this;
-   $scope.displayTweets = function(){
+
+   $scope.go = function() {
+      var testName = "there";
+      $scope.name = testName;
+      Hull.login({provider:'twitter'}).then(function(user) {
+         
+         testS(user.name);
+         
+      }, function(error) {
+        console.log(error.message);
+      });
+   }
+   $scope.testS = function(newName) {
+      debugger;
+      $scope.name = newName;
+   }
+   $scope.displayTweets = function() {
       Hull.api({
         provider:'twitter',
         path:'/statuses/home_timeline'
@@ -46,9 +48,6 @@ twitterListApp.controller('TweetCtrl', ['$scope', function($scope){
         };
       });
    }
-   
 }]);
 
-// Let's react to all events prefixed by 'hull.auth'
-Hull.on('hull.auth.*', refreshButton);
 

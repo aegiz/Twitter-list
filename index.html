@@ -17,17 +17,24 @@
 </head>
 <body>
    <div class="main-container" ng-app="twitterListApp">
-      <div class="calmdown">
-         <div data-hull-component='login/profile@hull' data-hull-provider="twitter" class="twitter-login"></div>
-      </div>
-      <div class="tweets-container">
-         <div ng-controller="TweetCtrl as tweetCtrl">
-            <table>
-              <tr ng-repeat="tweet in tweetCtrl.tweets">
-                  <td>{{tweet.text}}</td>
-              </tr>
-            </table>
-          </div>
+      <div class="calmdown" ng-controller="TweetCtrl">
+         <div ng-href='#here' ng-click='go()'>
+            <button class="twitter-login">
+               Login
+            </button>
+            <div>
+               Hello {{ name }}
+            </div>
+         </div>
+         <div class="tweets-container">
+            <div ng-controller="TweetCtrl as tweetCtrl">
+               <table>
+                 <tr ng-repeat="tweet in tweetCtrl.tweets">
+                     <td>{{tweet.text}}</td>
+                 </tr>
+               </table>
+             </div>
+         </div>
       </div>
    </div>
    <script type="text/javascript" src="js/myscripts.js"></script>
