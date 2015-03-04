@@ -1,3 +1,6 @@
+// Obj du matin : afficher les tweets
+// Obj journée : comprendre comment utiliser une directive, factory + ng-show / ng-hide
+
 Hull.init({
    appId : "54db24c7e4bd981bee000281",
    orgUrl: "https://6e082fcc.hullapp.io",
@@ -24,6 +27,7 @@ twitterListApp.controller('TweetCtrl', ['$scope', function($scope){
    $scope.go = function() {
       Hull.login({provider:'twitter'}).then(function(user) {
         $scope.displayUsername(user.name);
+        $scope.displayTweets();
       }, function(error) {
         console.log(error.message);
       });
@@ -38,10 +42,10 @@ twitterListApp.controller('TweetCtrl', ['$scope', function($scope){
         provider:'twitter',
         path:'/statuses/home_timeline'
       }, function(result){
-        console.log('This is the TL', result);
-        for (var i = result.length - 1; i >= 0; i--) {
-           TweetCtrl.tweets = result[i];
-        };
+        console.log('This is the TL obj', result);
+        $scope.$apply(function () {
+           $scope.tweets = result;
+         });
       });
    }
 }]);
