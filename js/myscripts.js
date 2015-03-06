@@ -1,5 +1,5 @@
-// Obj du matin : afficher les tweets
-// Obj journée : comprendre comment utiliser une directive, factory + ng-show / ng-hide
+// Obj du matin : Rassembler le call à Hull dans une factory
+// Obj journée : comprendre comment utiliser ng-show / ng-hide
 
 Hull.init({
    appId : "54db24c7e4bd981bee000281",
@@ -21,7 +21,18 @@ var twitterListApp = angular.module("twitterListApp", []);
    }
 });*/
 
-twitterListApp.controller('TweetCtrl', ['$scope', function($scope){
+twitterListApp.factory('getTweets', ['$http', '$log', function($http, $log) {
+   return {
+      get: function(url) {
+         return Hull.api({
+            provider:'twitter',
+            path: url
+         });
+      }
+   };
+}]);
+
+twitterListApp.controller('TweetCtrl', ['$log', '$scope', 'getTweets', function($log, $scope, getTweets){
    var TweetCtrl = this;
    $scope.name = "there";
    $scope.go = function() {
@@ -35,17 +46,19 @@ twitterListApp.controller('TweetCtrl', ['$scope', function($scope){
    $scope.displayUsername = function(hop) {
       $scope.$apply(function () {
          $scope.name = hop;
-     });
+      });
    }
    $scope.displayTweets = function() {
-      Hull.api({
-        provider:'twitter',
-        path:'/statuses/home_timeline'
-      }, function(result){
-        console.log('This is the TL obj', result);
-        $scope.$apply(function () {
-           $scope.tweets = result;
+      $scope.$apply(function () {
+         getTweets.get('/statuses/home_timeline').then(function(data) {
+            $scope.$apply(function () {
+              $scope.tweets = data;
+            });
+         }, function (error) {
+               console.error('handle error: ' + error.stack);
+               throw error;
          });
+
       });
    }
 }]);
