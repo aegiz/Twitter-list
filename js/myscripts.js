@@ -1,5 +1,6 @@
-// Obj du matin : Rassembler le call à Hull dans une factory
-// Obj journée : comprendre comment utiliser ng-show / ng-hide
+// Obj du matin : coupler la recuération de donnée sur l'api de twitter
+// Obj soir : afficher pour les 7 premiers following s'il appartient aux listes + optionnal comprendre comment utiliser ng-show / ng-hide 
+// Todo : mettre le tout dans un callback au niveau du foreach
 
 Hull.init({
    appId : "54db24c7e4bd981bee000281",
@@ -50,14 +51,32 @@ twitterListApp.controller('TweetCtrl', ['$log', '$scope', 'getTweets', function(
    }
    $scope.displayTweets = function() {
       $scope.$apply(function () {
-         getTweets.get('/statuses/home_timeline').then(function(data) {
-            $scope.$apply(function () {
-              $scope.tweets = data;
+         // L'idée c'est : on récupère tous les ids des followings
+         // On affiche les listes dans laquelle ils sont listés avec comme filtre ses propres listes
+         // + utiliser le curseur pour looper sur les différentes array de résultats https://dev.twitter.com/overview/api/cursoring
+         getTweets.get('/friends/ids?count=7&stringify_ids=1').then(function(data) {
+
+            data.ids.forEach(function(id) {
+               debugger;
+               getTweets.get('/lists/memberships?user_id=' + id + '&filter_to_owned_lists=1').then(function(data) {
+                  //$scope.$apply(function () {
+                    //$scope.tweets = data;
+                  //});
+                  debugger;
+               }, function (error) {
+                     console.error('handle error: ' + error.stack);
+                     throw error;
+               });
             });
+
+           
+            
          }, function (error) {
                console.error('handle error: ' + error.stack);
                throw error;
          });
+
+         
 
       });
    }
