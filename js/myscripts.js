@@ -36,7 +36,7 @@ twitterListApp.directive('helloWorld', function() { //
          scope.login = true;
          scope.logout = false;
          elem.find(".twitter-login").bind('click', scope.go);
-         elem.find(".twitter-logout").bind('click', scope.logout);
+         //elem.find(".twitter-logout").bind('click', scope.logout);
       },
       controller: "TweetCtrl",
       templateUrl: 'templates/templateList.html'
