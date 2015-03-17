@@ -1,0 +1,25 @@
+<div>
+   <div>
+      <div class="social-login">Hello {{ name }}</div>
+      <button class="twitter-login" ng-show="login">Login</button>
+      <button class="twitter-logout" ng-show="logout">Logout</button>
+   </div>
+   <div ng-show="logout" class="list-container">
+      <table class="table table-striped table-hover">
+         <!-- First row : All the list -->
+         <tr>
+            <td></td>
+            <td ng-repeat="list in lists">{{list.name}}</td>
+         </tr>
+         <!-- Folowings and their list -->
+         <tr ng-repeat="following in followingList">
+            <td>{{ following.name }}</td>
+            <td ng-repeat="somelist in following.belongsToList">
+               <input type="checkbox" class="checkbox" ng-checked="somelist" value="" name="check">
+            </td>
+         </tr>
+      </table>
+      <button class="submitChanges">Valider</button>
+      <button class="goNextPage">Next</button>
+   </div>
+</div>

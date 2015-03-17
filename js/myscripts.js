@@ -1,4 +1,6 @@
-// Prochain Obj : créer une directive pour afficher les différentes listes dans des encarts spécifiques
+// Prochain Obj : 
+// - bug bouton logout
+// - remplacer les données de followingList par celles renvoyées par displayFollowing
 // Todo: utiliser les curseurs pour gérer la pagination
 
 Hull.init({
@@ -14,14 +16,7 @@ Hull.init({
 
 var twitterListApp = angular.module("twitterListApp", []);
 
-
-/*twitterListApp.directive("getTweets", function(){
-   return {
-      restrict: "E",
-   }
-});*/
-
-twitterListApp.factory('getTweets', ['$http', '$log', function($http, $log) {
+twitterListApp.factory('getTwitterInfos', ['$http', '$log', function($http, $log) {
    return {
       get: function(url) {
          return Hull.api({
@@ -32,20 +27,59 @@ twitterListApp.factory('getTweets', ['$http', '$log', function($http, $log) {
    };
 }]);
 
-twitterListApp.controller('TweetCtrl', ['$log', '$scope', 'getTweets', function($log, $scope, getTweets){
+twitterListApp.directive('helloWorld', function() { //
+   return {
+      /*scope:true,*/
+      replace: true,
+      restrict: 'E',
+      link: function(scope, elem, attrs) {
+         scope.login = true;
+         scope.logout = false;
+         elem.find(".twitter-login").bind('click', scope.go);
+         elem.find(".twitter-logout").bind('click', scope.logout);
+      },
+      controller: "TweetCtrl",
+      templateUrl: 'templates/templateList.html'
+   }
+});
+
+twitterListApp.controller('TweetCtrl', ['$log', '$scope', 'getTwitterInfos', function($log, $scope, getTwitterInfos){
    var TweetCtrl = this;
-   $scope.name = "there";
+   $scope.name = "there... ";
+   $scope.followingList = [
+      {
+         name: "Following 1",
+         belongsToList: {
+            List1: true,
+            List2: false
+         }
+      },
+      {
+         name: "Following 2",
+         belongsToList: {
+            "List1": false,
+            "List2": false
+         }
+      }
+   ];
    $scope.go = function() {
       Hull.login({provider:'twitter'}).then(function(user) {
-        $scope.displayUsername(user.name);
-        $scope.displayTweets();
+         $scope.login = false;
+         $scope.logout = true;
+         $scope.displayUsername(user.name);
+         $scope.displayList();
       }, function(error) {
         console.log(error.message);
       });
    }
+   $scope.logout = function() {
+      $scope.login = true;
+      $scope.logout = false;
+      Hull.logout();
+   }
    $scope.execCallback = function(idArray) {
       $scope.$apply(function () {
-         getTweets.get('/lists/memberships?user_id=' + idArray[0] + '&filter_to_owned_lists=1').then(function(data) {
+         getTwitterInfos.get('/lists/memberships?user_id=' + idArray[0] + '&filter_to_owned_lists=1').then(function(data) {
             console.log(data);
             idArray.shift();
             if(idArray.length !== 0) {
@@ -57,16 +91,27 @@ twitterListApp.controller('TweetCtrl', ['$log', '$scope', 'getTweets', function(
          });
       });
    }
-   $scope.displayUsername = function(hop) {
+   $scope.displayUsername = function(name) {
       $scope.$apply(function () {
-         $scope.name = hop;
+         $scope.name = name;
       });
    }
-   $scope.displayTweets = function() {
+   $scope.displayList = function() {
+      $scope.$apply(function () {
+         getTwitterInfos.get('/lists/list').then(function(data) {
+            $scope.lists = data;
+            $scope.displayFollowing();
+         }, function (error) {
+               console.error('handle error: ' + error.stack);
+               throw error;
+         });
+      });
+   }
+   $scope.displayFollowing = function() {
       $scope.$apply(function () {
          // L'idée est la suivante : on récupère tous les ids des followings de l'utilisateur
          // Ensuite pour chacun de ces id on va aller chercher les liste dans lequel il est repertorié avec comme filtre les propres listes de l'utilisateur
-         getTweets.get('/friends/ids?count=3&stringify_ids=1').then(function(data) {
+         getTwitterInfos.get('/friends/ids?count=3&stringify_ids=1').then(function(data) {
             // On est obligé d'utiliser une recursion pour chainer nos appels
             $scope.execCallback(data.ids);
          }, function (error) {

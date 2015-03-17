@@ -3,7 +3,7 @@
 <head>
    <meta charset="utf-8">
 
-   <title>Twitter list</title>
+   <title>list</title>
    <meta name="description" content="Hullo, world!">
    <meta name="viewport" content="width=device-width">
    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
@@ -18,23 +18,10 @@
 <body>
    <div class="main-container" ng-app="twitterListApp">
       <div class="calmdown" ng-controller="TweetCtrl">
-         <div ng-href='#here' ng-click='go()'>
-            <div>
-               Hello {{ name }}
-            </div>
-            <button class="twitter-login">
-               Login
-            </button>
-         </div>
-         <div class="tweets-container">
-            <table class="table table-striped table-hover">
-              <tr ng-repeat="tweet in tweets">
-                  <td>{{tweet.text}}</td>
-              </tr>
-            </table>
-         </div>
+         <hello-world/>
       </div>
    </div>
    <script type="text/javascript" src="js/myscripts.js"></script>
+</body>
 </body>
 </html>
