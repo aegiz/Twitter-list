@@ -1,0 +1,17 @@
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Other #
+/node_modules/
+/.sass-cache/
+.awspublish**
+aws-credentials.json
+dist
+bower_components
