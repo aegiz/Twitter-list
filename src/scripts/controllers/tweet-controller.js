@@ -1,26 +1,32 @@
 'use strict';
 
 angular.module('twitterListApp')
-   .controller('TweetCtrl', ['$log', '$scope', 'getTwitterInfos' , 'Auth' , function($log, $scope, getTwitterInfos, Auth) {
+   .controller('TweetCtrl', ['$log', '$scope', 'getTwitterInfos' , function($log, $scope, getTwitterInfos) {
       var TweetCtrl = this;
       $scope.name = "there... ";
       $scope.followingList = [];
       $scope.lists = [];
-      go = function() {
-         Auth.login().then(function(user) {
-            $scope.login = false;
-            $scope.logout = true;
-            displayUsername(user.name);
-            displayList();
-         }, function(error) {
-           console.log(error.message);
-         });
-      }
-      logout = function() {
+
+      $scope.login = true;
+      $scope.logout = false;
+
+      /*logout = function() {
          $scope.login = true;
          $scope.logout = false;
          Hull.logout();
+      }*/
+      
+      displayUsername = function(name) {
+         $scope.name = name;
       }
+
+      $scope.$on('someEvent', function (event, data) {
+         $scope.login = false;
+         $scope.logout = true;
+        console.log("receive event from login" + data);
+        $scope.$broadcast('toggleAnimation', 'Some data');
+      });
+
       isPartOfList = function(returnList) {
          var belongTo = {};
          $scope.lists.map(function(list) {
@@ -31,6 +37,7 @@ angular.module('twitterListApp')
          });
          return belongTo;
       }
+
       execCallback = function(userArray) {
             // ... Ensuite pour chacun des followings on va aller chercher les listes dans lesquelles il a été repertoriée (avec comme filtre les propres listes de l'utilisateur)
             getTwitterInfos.get('/lists/memberships?user_id=' + userArray[0].id + '&filter_to_owned_lists=1').then(function(data) {
@@ -45,9 +52,7 @@ angular.module('twitterListApp')
                   throw error;
             });
       }
-      displayUsername = function(name) {
-         $scope.name = name;
-      }
+
       displayList = function() {
          // On affiche toutes les listes dans la première rangée
          getTwitterInfos.get('/lists/ownerships').then(function(data) {
@@ -58,6 +63,7 @@ angular.module('twitterListApp')
                throw error;
          });
       }
+      
       displayFollowing = function() {
          // L'idée est la suivante : on récupère tous les infos concernant les followings ...
          getTwitterInfos.get('/friends/list?count=10').then(function(data) {
