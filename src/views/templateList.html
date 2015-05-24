@@ -10,7 +10,7 @@
          <tr ng-repeat="following in followingList">
             <td>{{ following.name }}</td>
             <td ng-repeat="somelist in following.belongsToList">
-               <input type="checkbox" class="checkbox" ng-checked="somelist" value="" name="check">
+               <input type="checkbox" class="checkbox" ng-checked="somelist" value="" name="check" ng-click="watchClick($event)">
             </td>
          </tr>
       </table>

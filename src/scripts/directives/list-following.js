@@ -11,6 +11,7 @@ angular.module('twitterListApp')
                displayList();
             });
          },
+         controller: 'TableCtrl',
          templateUrl: 'templateList.html'
       }
    });
