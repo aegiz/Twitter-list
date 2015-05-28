@@ -1,11 +1,16 @@
 // Prochain Obj : 
-// - comprendre pourquoi les colonnes se réorganisent d'un seul coup à la fin
 
 // Todo: 
+
+// - réimplémenter les appels à l'API twitter pour mieux gérer le ratelimit
 // - utiliser les curseurs pour gérer la pagination
 // - bug bouton logout
-// - valider la souscription à une nouvelle listes
 
+// Nouvelle stratégie
+// 1- Call pour récupérer toutes les listes de l'utilisateur
+// 2- Call pour récupérer les 100 derniers following
+// 3- Pour chaque liste de l'utilisateur call pour en récupérer tous les membres.
+// 4- Comparer
 
 // ANGULAR :
 
