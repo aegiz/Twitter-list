@@ -7,14 +7,14 @@
             <td ng-repeat="list in lists">{{list.name}}</td>
          </tr>
          <!-- Folowings and their list -->
-         <tr ng-repeat="following in followingList">
-            <td>{{ following.name }}</td>
-            <td ng-repeat="somelist in following.belongsToList">
-               <input type="checkbox" class="checkbox" ng-checked="somelist" value="" name="check" ng-click="watchClick($event)">
+         <tr ng-repeat="cellule in matrix">
+            <td>{{ cellule.name }}</td>
+            <td ng-repeat="list in cellule.belongsToList">
+               <input type="checkbox" class="checkbox" value="" name="check" ng-model="list.subscribed" ng-change="handleInputClick(list)">
             </td>
          </tr>
       </table>
-      <button class="submitChanges">Valider</button>
+      <button class="submitChanges" ng-click="handleValidation()">Valider</button>
       <button class="goNextPage">Next</button>
       <button class="twitter-logout" ng-show="logout">Logout</button>
    </div>
