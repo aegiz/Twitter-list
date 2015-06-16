@@ -51,15 +51,21 @@ angular.module('twitterListApp')
    */
 
    getTableDatas = function(xFlw) {
-      // First step : on récupère toutes les listes pour l'axe des abscisses
+      // First step : on récupère toutes les listes créé par notre utilisateur
       getTwitterInfos.get('/lists/ownerships').then(function(data) {
          $scope.lists = data.lists;
-         // Pour compléter le reste des cellules on doit commencer par récupérer les xFlw derniers followings
-         getTwitterInfos.get('/friends/list?count=' + xFlw).then(function(data) {
-            readUsers(data.users).then(function(data) {
-               $scope.matrix = data;
+         // Deuxième étape: on va récupérer toutes les personnes dans ces listes
+         getUsersInLists(data.lists).then(function(data) {
+            $scope.listOfLists = data;
+            // Troisième étape : on récupére les xFlw dernières personnes suivies par notre utilisateur
+            getTwitterInfos.get('/friends/list?count=' + xFlw).then(function(data) {
+               $scope.users = data.users;
+               // Quatrième étape : on compare et on trie
+               $scope.matrix = buildKeyList();
+               debugger;
             });
          });
+         
       }, function (error) {
          console.error('handle error: ' + error.stack);
          throw error;
@@ -67,40 +73,31 @@ angular.module('twitterListApp')
    }
 
    /*
-   * Dans cette fonction on va chercher recursivement à savoir si l'utilisateur est repertorié les liste de l'utilisateur actuellement loggé
-   * @param {object} users. Une arrays contenant tous les derniers users
-   * @return {Object} this objectect is an array of rows
+   * Cette fonction va chercher récursivement pour chaque liste leurs utilisateurs.
+   * @param {object} lists. Une arrays contenant toutes les listes créé par l'utilisateur
+   * @return {Object} listOfLists une array d'arrays
    */
 
-   readUsers = function(users) {
+   getUsersInLists = function(lists) {
+      
       var deferred = $q.defer();
-      var followingList = [];
-      var loadUser = function (index) {
-         var user = users[index];
-         if (!user) {
-            deferred.resolve(followingList);
-            return followingList;
+      var listOfLists = [];
+      var loadLists = function (index) {
+         var list = lists[index];
+         if (!list) {
+            deferred.resolve(listOfLists);
+            return listOfLists;
          }
-         getTwitterInfos.get('/lists/memberships?user_id=' + user.id + '&filter_to_owned_lists=1')
+         getTwitterInfos.get('/lists/members?list_id=' + list.id + '&skip_status=1&count=5000')
          .then(function (data) {
-            if(data.error) {
-               deferred.resolve(followingList);
-               return followingList;
-            } else {
-               var userArray = [];
-               userArray["name"] = user.name;
-               userArray["belongsToList"] =  buildKeyList(data.lists, user.screen_name);
-               followingList.push(userArray);
-               loadUser(++index); // recursif
-            }
+            listOfLists.push({name: list.slug, users: data.users});
+            loadLists(++index); // recursif
          })
          .catch(function (err) {
             deferred.reject(err);
          });
       }
-
-      loadUser(0);
-
+      loadLists(0);
       return deferred.promise;
    };
 
@@ -136,18 +133,21 @@ angular.module('twitterListApp')
    * @return {Object} belongTo : une arrray des lists dans lequel est présent le user + l'id du user et l'id de la liste
    */
 
-   buildKeyList = function(lists, userName) {
-      var belongTo = {};
-      // on remplie list_id et user_id avec les bonnes valeurs et on initialise toutes les listes existantes à false
-      $scope.lists.map(function(list) {
-         belongTo[list.name] = {"list_id": list.id, "user_id": userName, "init_subscribed": false, "subscribed": false};
+   buildKeyList = function() {
+      var followingList = [];
+      _.each($scope.users, function(userRow) {
+         var belongsToList = {};
+         var userInfos = {};
+         userInfos["name"] = userRow.screen_name;
+         _.each($scope.listOfLists, function(list) {
+            belongsToList[list.name] = (_.filter(list.users, function(user) {
+                      return user.screen_name === userRow.screen_name;
+                  }).length === 0) ? false : true;
+         });
+         userInfos["belongsToList"] = belongsToList;
+         followingList.push(userInfos);
       });
-      // s'il y a match entre les lists dans lequel est l'utilisateur et toutes les lists on change la valeur de la celulle à true
-      lists.map(function(list) {
-         belongTo[list.name]["init_subscribed"] = true;
-         belongTo[list.name]["subscribed"] = true;
-      });
-      return belongTo;
+      return followingList;
    }
    
    }]);
