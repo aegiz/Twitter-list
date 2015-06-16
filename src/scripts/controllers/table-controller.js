@@ -62,7 +62,6 @@ angular.module('twitterListApp')
                $scope.users = data.users;
                // Quatrième étape : on compare et on trie
                $scope.matrix = buildKeyList();
-               debugger;
             });
          });
          
@@ -90,7 +89,7 @@ angular.module('twitterListApp')
          }
          getTwitterInfos.get('/lists/members?list_id=' + list.id + '&skip_status=1&count=5000')
          .then(function (data) {
-            listOfLists.push({name: list.slug, users: data.users});
+            listOfLists.push({name: list.slug, id:list.id, users: data.users});
             loadLists(++index); // recursif
          })
          .catch(function (err) {
@@ -140,9 +139,15 @@ angular.module('twitterListApp')
          var userInfos = {};
          userInfos["name"] = userRow.screen_name;
          _.each($scope.listOfLists, function(list) {
-            belongsToList[list.name] = (_.filter(list.users, function(user) {
+            var followList = (_.filter(list.users, function(user) {
                       return user.screen_name === userRow.screen_name;
                   }).length === 0) ? false : true;
+            belongsToList[list.name] = {
+               "list_id": list.id,
+               "user_id": userRow.id,
+               "init_subscribed": followList,
+               "subscribed": followList
+            }
          });
          userInfos["belongsToList"] = belongsToList;
          followingList.push(userInfos);
