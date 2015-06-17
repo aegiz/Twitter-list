@@ -22,7 +22,7 @@ angular.module('twitterListApp')
       if(infos.subscribed !== infos.init_subscribed) {
          newListToSubscribeTo[infos.user_id + "-" + infos.list_id] = {
             list_id: infos.list_id,
-            screen_name: infos.user_id,
+            user_id: infos.user_id,
             actionTodo: (infos.subscribed) ? "create" : "destroy"
          };
       } else {
@@ -39,9 +39,9 @@ angular.module('twitterListApp')
       
       // Convert object into array
       newListToSubscribeTo = Object.keys(newListToSubscribeTo).map(function(key) { return newListToSubscribeTo[key]});
-
+      debugger;
       subscribeUsers(newListToSubscribeTo).then(function(data) {
-          debugger;
+          
       });
    };
 
@@ -53,10 +53,9 @@ angular.module('twitterListApp')
    getTableDatas = function(xFlw) {
       // First step : on récupère toutes les listes créé par notre utilisateur
       getTwitterInfos.get('/lists/ownerships').then(function(data) {
-         $scope.lists = data.lists;
          // Deuxième étape: on va récupérer toutes les personnes dans ces listes
          getUsersInLists(data.lists).then(function(data) {
-            $scope.listOfLists = data;
+            $scope.listOfLists = _.sortBy(data, function (obj) {return obj.name});
             // Troisième étape : on récupére les xFlw dernières personnes suivies par notre utilisateur
             getTwitterInfos.get('/friends/list?count=' + xFlw).then(function(data) {
                $scope.users = data.users;
@@ -64,7 +63,6 @@ angular.module('twitterListApp')
                $scope.matrix = buildKeyList();
             });
          });
-         
       }, function (error) {
          console.error('handle error: ' + error.stack);
          throw error;
@@ -113,7 +111,7 @@ angular.module('twitterListApp')
             deferred.resolve("ok");
             return;
          }
-         getTwitterInfos.post('/lists/members/' + item.actionTodo + '?list_id=' + item.list_id + '&screen_name=' + item.screen_name)
+         getTwitterInfos.post('/lists/members/' + item.actionTodo + '?list_id=' + item.list_id + '&user_id=' + item.user_id)
          .then(function (data) {
             subscribe(++index); // recursif
          })
@@ -139,9 +137,10 @@ angular.module('twitterListApp')
          var userInfos = {};
          userInfos["name"] = userRow.screen_name;
          _.each($scope.listOfLists, function(list) {
+
             var followList = (_.filter(list.users, function(user) {
                       return user.screen_name === userRow.screen_name;
-                  }).length === 0) ? false : true;
+                  }).length === 0) ? false : true; // Si l'utilisateur se trouve dans la liste => true sinon false
             belongsToList[list.name] = {
                "list_id": list.id,
                "user_id": userRow.id,
