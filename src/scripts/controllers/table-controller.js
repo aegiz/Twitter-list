@@ -5,12 +5,11 @@ angular.module('twitterListApp')
    
    $scope.lists = [];
    $scope.matrix = [];
-
-   var newListToSubscribeTo = {};
+   $scope.cellToUpdate = [];
 
    /*
    * Recupère le clic sur les input
-   * Va ensuite repretorier dans une array newListToSubscribeTo les changements au sein du tableau.
+   * Va ensuite repertorier dans une array cellToUpdate les changements a executer.
    * @param {object} infos toutes les infos à propos de ce champs input
    * @param {number} infos.list_id l'id de la liste associé (en abscisses)
    * @param {string} infos.user_id le nom de l'utilisateur associé (en ordonnées)
@@ -20,28 +19,31 @@ angular.module('twitterListApp')
 
    $scope.handleInputClick = function(infos) {
       if(infos.subscribed !== infos.init_subscribed) {
-         newListToSubscribeTo[infos.user_id + "-" + infos.list_id] = {
-            list_id: infos.list_id,
-            user_id: infos.user_id,
-            actionTodo: (infos.subscribed) ? "create" : "destroy"
-         };
+         $scope.cellToUpdate.push({
+            "name": infos.user_id + "-" + infos.list_id,
+            "monObj" : infos,
+            "actionTodo": (infos.subscribed) ? "create" : "destroy"
+         });         
       } else {
-         delete newListToSubscribeTo[infos.user_id + "-" + infos.list_id];
+         // Remove sur l'element une action
+         $scope.cellToUpdate = _.filter($scope.cellToUpdate, function(el) {
+            return el.name !== infos.user_id + "-" + infos.list_id;
+         });
       }
    };
 
    /*
    * Valide et souscrit les utilisateurs aux nouvelles listes.
+   * Dans le callback on reinitialise la valeur initiale des input 
    * (Pour cela on utilise les données du tableau newListToSubscribeTo)
    */
 
    $scope.handleValidation = function() {
-      
-      // Convert object into array
-      newListToSubscribeTo = Object.keys(newListToSubscribeTo).map(function(key) { return newListToSubscribeTo[key]});
-      debugger;
-      subscribeUsers(newListToSubscribeTo).then(function(data) {
-          
+      subscribeUsers($scope.cellToUpdate).then(function(data) {
+         _.each($scope.cellToUpdate, function(cell) {
+            cell.monObj.init_subscribed = cell.monObj.subscribed;
+         });
+         $scope.cellToUpdate = [];
       });
    };
 
@@ -111,7 +113,7 @@ angular.module('twitterListApp')
             deferred.resolve("ok");
             return;
          }
-         getTwitterInfos.post('/lists/members/' + item.actionTodo + '?list_id=' + item.list_id + '&user_id=' + item.user_id)
+         getTwitterInfos.post('/lists/members/' + item.actionTodo + '?list_id=' + item.monObj.list_id + '&user_id=' + item.monObj.user_id)
          .then(function (data) {
             subscribe(++index); // recursif
          })
@@ -145,7 +147,8 @@ angular.module('twitterListApp')
                "list_id": list.id,
                "user_id": userRow.id,
                "init_subscribed": followList,
-               "subscribed": followList
+               "subscribed": followList,
+
             }
          });
          userInfos["belongsToList"] = belongsToList;
