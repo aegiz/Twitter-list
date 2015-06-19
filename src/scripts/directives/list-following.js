@@ -8,7 +8,7 @@ angular.module('twitterListApp')
             scope.$on("toggleAnimation", function (event, args) {
                console.log("receive in tableau");
                displayUsername("User");
-               getTableDatas(2);
+               getTableDatas(100);
             });
          },
          controller: 'TableCtrl',

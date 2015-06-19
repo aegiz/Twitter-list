@@ -1,16 +1,15 @@
 // Prochain Obj : 
 
-// Todo: 
+// TODO & Features (non priorétisés)
 
-// - réimplémenter les appels à l'API twitter pour mieux gérer le ratelimit
-// - utiliser les curseurs pour gérer la pagination
-// - bug bouton logout
-
-// Nouvelle stratégie
-// 1- Call pour récupérer toutes les listes de l'utilisateur
-// 2- Call pour récupérer les 100 derniers following
-// 3- Pour chaque liste de l'utilisateur call pour en récupérer tous les membres.
-// 4- Comparer
+// Bug quand l'utilisateur clic sur le bouton mais ne se log pas dans la popup
+// Au scroll faire aussi descendre l'axe des abscisses pour pouvoir continuer à suivre les listes
+// Au clic sur une rangée : afficher (dans une popup?) plus d'informations sur l'utilisateur.
+// Pouvoir nottamment unfollow un utilisateur et le supprimer par la même occasion des listes dans lesquelles il était.
+// Au clic sur un nouveau bouton pouvoir afficher uniquement les utilisateurs n'ayant pas encore été classé dans des listes
+// Implémentation des boutons suivant / précédent permettant d'accéder à la suite de la liste
+// Prévoir le fait que l'utilisateur ait 40 listes
+// Prévoir le fait que l'utilisateur ait 0 liste
 
 // ANGULAR :
 
