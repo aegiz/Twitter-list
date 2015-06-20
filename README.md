@@ -30,4 +30,5 @@ Run the following command :
 ```
 $ npm install
 $ bower install
+gulp // to launch the server which will be run by default on 8042 port
 ```
