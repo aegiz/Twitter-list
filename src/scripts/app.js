@@ -2,7 +2,7 @@
 
 // TODO & Features (non priorétisés)
 
-// Importer Underscore via bower
+
 // Mettre un loading de chargement quand récupération des données
 // Bug quand l'utilisateur clic sur le bouton mais ne se log pas dans la popup
 // Au scroll faire aussi descendre l'axe des abscisses pour pouvoir continuer à suivre les listes
