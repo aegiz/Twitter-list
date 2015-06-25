@@ -1,12 +1,16 @@
 'use strict';
 
 angular.module('twitterListApp')
-   .controller('LoginCtrl', ['$log', '$scope', 'getTwitterInfos' , 'Auth' , function($log, $scope, getTwitterInfos, Auth) {
-      $scope.go = function() {
+   .controller('LoginCtrl', ['$log', '$scope', 'Auth', 'User' , function($log, $scope, Auth, User) {
+      $scope.connect = function() {
          Auth.login().then(function(user) {
-            console.log("send event from login");
+            User.name = user.name;
+            /*$scope.login = true;
+            $scope.name = user.name;
+            Login.retrieveTable();*/
+            //console.log("send event from login");
             //$emit the event to the ctrl
-            $scope.$emit('someEvent', [1,2,3]);
+            //$scope.$emit('someEvent', [1,2,3]);
          }, function(error) {
            console.log(error.message);
          });

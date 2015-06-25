@@ -1,11 +1,23 @@
 'use strict';
 
 angular.module('twitterListApp')
-   .controller('TableCtrl', ['$log', '$scope', 'getTwitterInfos' , '$q', 'Auth' , function($log, $scope, getTwitterInfos, $q, Auth) {
+   .controller('TableCtrl', ['$log', '$scope', 'getTwitterInfos' , '$q', 'Auth', 'User', function($log, $scope, getTwitterInfos, $q, Auth, User) {
    
    $scope.lists = [];
    $scope.matrix = [];
    $scope.cellToUpdate = [];
+
+   $scope.User = User;
+   $scope.name = User.name;
+
+   $scope.$watch('User.name', function (newVal, oldVal) {
+      if(newVal !== oldVal) {
+         $scope.name = newVal;
+         $scope.login = false;
+         $scope.logout = true;
+         $scope.getTableDatas(100);
+      }
+   });
 
    /*
    * Recupère le clic sur les input

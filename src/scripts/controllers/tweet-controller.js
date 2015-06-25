@@ -6,14 +6,14 @@ angular.module('twitterListApp')
       $scope.name = "there... ";
       $scope.login = true;
      
-      $scope.displayUsername = function(name) {
+      /*$scope.displayUsername = function(name) {
          $scope.name = name;
-      }
+      }*/
 
-      $scope.$on('someEvent', function (event, data) {
+      /*$scope.$on('someEvent', function (event, data) {
          $scope.login = false;
          $scope.logout = true;
          console.log("receive event from login" + data);
          $scope.$broadcast('toggleAnimation', 'Some data');
-      });
+      });*/
    }]);
