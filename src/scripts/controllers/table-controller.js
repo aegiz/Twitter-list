@@ -52,12 +52,12 @@ angular.module('twitterListApp')
    * @param {number} xFlw. Le nombre de following à afficher
    */
 
-   getTableDatas = function(xFlw) {
+   $scope.getTableDatas = function(xFlw) {
       // First step : on récupère toutes les listes créé par notre utilisateur
       getTwitterInfos.get('/lists/ownerships').then(function(data) {
          // Deuxième étape: on va récupérer toutes les personnes dans ces listes
          getUsersInLists(data.lists).then(function(data) {
-            $scope.listOfLists = _.sortBy(data, function (obj) {return obj.name});
+            $scope.listOfLists = _.sortBy(data, function (obj) {return obj.name;});
             // Troisième étape : on récupére les xFlw dernières personnes suivies par notre utilisateur
             getTwitterInfos.get('/friends/list?count=' + xFlw).then(function(data) {
                $scope.users = data.users;
@@ -69,7 +69,7 @@ angular.module('twitterListApp')
          console.error('handle error: ' + error.stack);
          throw error;
       });
-   }
+   };
 
    /*
    * Cette fonction va chercher récursivement pour chaque liste leurs utilisateurs.
@@ -77,7 +77,7 @@ angular.module('twitterListApp')
    * @return {Object} listOfLists une array d'arrays
    */
 
-   getUsersInLists = function(lists) {
+   function getUsersInLists(lists) {
       
       var deferred = $q.defer();
       var listOfLists = [];
@@ -95,16 +95,16 @@ angular.module('twitterListApp')
          .catch(function (err) {
             deferred.reject(err);
          });
-      }
+      };
       loadLists(0);
       return deferred.promise;
-   };
+   }
 
    /*
    * Lance tous les calls de subsciption/unsubscription sur les différents users
    */
 
-   subscribeUsers = function(items) {
+   function subscribeUsers(items) {
       var deferred = $q.defer();
 
       var subscribe = function (index) {
@@ -120,24 +120,24 @@ angular.module('twitterListApp')
          .catch(function (err) {
             deferred.reject(err);
          });
-      }
+      };
 
       subscribe(0);
 
       return deferred.promise;
-   };
+   }
 
    /*
    * Retourne un object contenant toutes les infos pour une cellule
    * @return {Object} belongTo : une arrray des lists dans lequel est présent le user + l'id du user et l'id de la liste
    */
 
-   buildKeyList = function() {
+   function buildKeyList() {
       var followingList = [];
       _.each($scope.users, function(userRow) {
          var belongsToList = {};
          var userInfos = {};
-         userInfos["name"] = userRow.screen_name;
+         userInfos.name = userRow.screen_name;
          _.each($scope.listOfLists, function(list) {
 
             var followList = (_.filter(list.users, function(user) {
@@ -149,9 +149,9 @@ angular.module('twitterListApp')
                "init_subscribed": followList,
                "subscribed": followList,
 
-            }
+            };
          });
-         userInfos["belongsToList"] = belongsToList;
+         userInfos.belongsToList = belongsToList;
          followingList.push(userInfos);
       });
       return followingList;
