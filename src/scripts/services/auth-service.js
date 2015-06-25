@@ -1,19 +1,18 @@
 'use strict';
 angular.module('twitterListApp')
-  .service('Auth', function (HullService) {
-    this.login = function () {
+.service('Auth', function (HullService) {
+   this.login = function () {
       return HullService.login();
-    };
-
-    this.logout = function () {
+   };
+   this.logout = function () {
       return HullService.logout();
-    };
+   };
 
-    this.currentUser = function () {
+   this.currentUser = function () {
       return HullService.currentUser();
-    };
+   };
 
-    this.currentApp = function () {
+   this.currentApp = function () {
       return HullService.currentApp();
-    };
-  });
+   };
+});
