@@ -15,7 +15,7 @@ angular.module('twitterListApp')
          $scope.name = newVal;
          $scope.login = false;
          $scope.logout = true;
-         $scope.getTableDatas(100);
+         $scope.initializeTableWithDatas(100);
       }
    });
 
@@ -64,7 +64,7 @@ angular.module('twitterListApp')
    * @param {number} xFlw. Le nombre de following à afficher
    */
 
-   $scope.getTableDatas = function(xFlw) {
+   $scope.initializeTableWithDatas = function(xFlw) {
       // First step : on récupère toutes les listes créé par notre utilisateur
       getTwitterInfos.get('/lists/ownerships').then(function(data) {
          // Deuxième étape: on va récupérer toutes les personnes dans ces listes
