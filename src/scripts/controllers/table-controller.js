@@ -15,7 +15,8 @@ angular.module('twitterListApp')
          $scope.name = newVal;
          $scope.login = false;
          $scope.logout = true;
-         $scope.initializeTableWithDatas(100);
+         //$scope.initializeTableWithDatas(10);
+         $scope.testOnlyNoList();
       }
    });
 
@@ -75,6 +76,36 @@ angular.module('twitterListApp')
                $scope.users = data.users;
                // Quatrième étape : on compare et on trie
                $scope.matrix = buildKeyList();
+            });
+         });
+      }, function (error) {
+         console.error('handle error: ' + error.stack);
+         throw error;
+      });
+   };
+
+   /*
+   * Recupère les datas à afficher dans le tableau
+   * @param {number} xFlw. Le nombre de following à afficher
+   */
+
+   $scope.testOnlyNoList = function() {
+      // First step : on récupère toutes les listes créé par notre utilisateur
+      getTwitterInfos.get('/lists/ownerships').then(function(data) {
+         // Deuxième étape: on va récupérer toutes les personnes dans ces listes
+         getUsersInLists(data.lists).then(function(data) {
+            $scope.listOfLists = _.sortBy(data, function (obj) {return obj.name;});
+            // Troisième étape : on récupére les xFlw dernières personnes suivies par notre utilisateur
+            getTwitterInfos.get('/friends/ids?count=5000').then(function(data) {
+               // Quatrième étape : on score chaque user avec le nombre de lsite dans lequel il est
+               var scoreList = buildScoreList(data.ids);
+               //Ensuite on trie le tableau en ne récupérant que ceux qui ont un score de 0
+              
+               var scoreListW0 = _.filter(scoreList, function(list) {
+                   return list.score === 0;
+               })
+                debugger;
+               $scope.matrix = buildKeyList2(scoreListW0);
             });
          });
       }, function (error) {
@@ -161,6 +192,60 @@ angular.module('twitterListApp')
                "init_subscribed": followList,
                "subscribed": followList,
 
+            };
+         });
+         userInfos.belongsToList = belongsToList;
+         followingList.push(userInfos);
+      });
+      return followingList;
+   }
+
+   /*
+   * L'idée : pour chaque ids de personne suivi on va établir un score de nombre de listes dans lequel il est présent
+   */
+
+   function buildScoreList(ids) {
+      var score = [];
+      
+      _.each(ids, function(id) {
+         var infoUser = {
+            "id": id,
+            "score": 0,
+            belongsToList: {} // a completer
+         };
+         _.each($scope.listOfLists, function(list) {
+            if(_.filter(list.users, function(user) {
+                  return user.id === id;
+               }).length !== 0) {
+               infoUser.score ++;
+            }
+         });
+         score.push(infoUser);
+      });
+      return score;
+   }
+
+   /*
+   * ... Ensuite pour chaque user avec un score de 0 on va faire https://dev.twitter.com/rest/reference/get/users/lookup
+   * pour obtenir plus d'infos sur l'user en question
+   */
+
+   function buildKeyList2() {
+     var followingList = [];
+      _.each($scope.users, function(userRow) {
+         var belongsToList = {};
+         var userInfos = {};
+         userInfos.name = userRow.screen_name;
+         _.each($scope.listOfLists, function(list) {
+
+            var followList = (_.filter(list.users, function(user) {
+                      return user.screen_name === userRow.screen_name;
+                  }).length === 0) ? false : true; // Si l'utilisateur se trouve dans la liste => true sinon false
+            belongsToList[list.name] = {
+               "list_id": list.id,
+               "user_id": userRow.id,
+               "init_subscribed": followList,
+               "subscribed": followList,
             };
          });
          userInfos.belongsToList = belongsToList;
