@@ -4,7 +4,7 @@ angular.module('twitterListApp')
          replace: true,
          restrict: 'E',
          link: function(scope, elem, attrs) {
-            elem.bind('click', scope.go);
+            elem.bind('click', scope.connect);
          },
          controller: "LoginCtrl",
          templateUrl: 'login.html'
