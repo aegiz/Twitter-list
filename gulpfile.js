@@ -87,5 +87,9 @@ gulp.task('watch', function () {
 });
 
 
-gulp.task('default', ['connect', 'watch']);
+gulp.task('build', ['index', 'templates', 'sass', 'js-sandbox']);
+
+gulp.task('default', ['build'], function() {
+  gulp.start('connect', 'watch');
+});
 //gulp.task('build', ['html', 'sass', 'js-sandbox', 'image', 'font']);
