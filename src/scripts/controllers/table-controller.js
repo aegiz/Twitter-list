@@ -15,8 +15,7 @@ angular.module('twitterListApp')
          $scope.name = newVal;
          $scope.login = false;
          $scope.logout = true;
-         //$scope.initializeTableWithDatas(100);
-         $scope.testOnlyNoList();
+         $scope.initializeTableWithDatas(10, false);
       }
    });
 
@@ -65,7 +64,7 @@ angular.module('twitterListApp')
    * @param {number} xFlw. Le nombre de following à afficher
    */
 
-   $scope.initializeTableWithDatas = function(xFlw) {
+   $scope.initializeTableWithDatas = function(xFlw, testOnlyNoList) {
       // First step : on récupère toutes les listes créé par notre utilisateur
       getTwitterInfos.get('/lists/ownerships').then(function(data) {
          // Deuxième étape: on va récupérer toutes les personnes dans ces listes
@@ -73,39 +72,21 @@ angular.module('twitterListApp')
             $scope.listOfLists = _.sortBy(data, function (obj) {return obj.name;});
             // Troisième étape : on récupére les xFlw dernières personnes suivies par notre utilisateur (max: 200)
             getTwitterInfos.get('/friends/list?count=' + xFlw).then(function(data) {
+               debugger;
                $scope.users = data.users;
-               // Quatrième étape : on compare et on trie
-               $scope.matrix = buildKeyList(data.users, true);
-            });
-         });
-      }, function (error) {
-         console.error('handle error: ' + error.stack);
-         throw error;
-      });
-   };
-
-   /*
-   * Recupère les datas à afficher dans le tableau
-   * @param {number} xFlw. Le nombre de following à afficher
-   */
-
-   $scope.testOnlyNoList = function() {
-      // First step : on récupère toutes les listes créé par notre utilisateur
-      getTwitterInfos.get('/lists/ownerships').then(function(data) {
-         // Deuxième étape: on va récupérer toutes les personnes dans ces listes
-         getUsersInLists(data.lists).then(function(data) {
-            $scope.listOfLists = _.sortBy(data, function (obj) {return obj.name;});
-            // Troisième étape : on récupére les 100 derniere personnes que follow notre user
-            getTwitterInfos.get('/friends/list?count=100').then(function(data) {
-               // Quatrième étape : on score chaque user avec le nombre de liste dans lequel il est présent
-               $scope.scoreList = buildScoreList(_.map(data.users, function(obj) { return _.pick(obj, 'id', 'screen_name'); })); // on ne recupère que les deux valeurs qui ous intéresse
-               //Ensuite on trie le tableau en ne récupérant que ceux qui ont un score de 0
-               var scoreListW0 = _.filter($scope.scoreList, function(list) {
-                   return list.score === 0;
-               });
-               // Cinquième étape on compare et on trie
-               $scope.matrix = buildKeyList(scoreListW0, false);
-
+               if(testOnlyNoList) {
+                  // Quatrième étape : on score chaque user avec le nombre de liste dans lequel il est présent
+                  $scope.scoreList = buildScoreList(_.map(data.users, function(obj) { return _.pick(obj, 'id', 'screen_name'); })); // on ne recupère que les deux valeurs qui ous intéresse
+                  //Ensuite on trie le tableau en ne récupérant que ceux qui ont un score de 0
+                  var scoreListW0 = _.filter($scope.scoreList, function(list) {
+                      return list.score === 0;
+                  });
+                  // Cinquième étape on compare et on trie
+                  $scope.matrix = buildKeyList(scoreListW0, false);
+               } else {
+                  // Quatrième étape : on compare et on trie
+                  $scope.matrix = buildKeyList(data.users, true);
+               }
             });
          });
       }, function (error) {
