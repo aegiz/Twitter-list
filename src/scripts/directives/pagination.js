@@ -1,11 +1,11 @@
 'use strict';
 
 angular.module('twitterListApp')
-   .directive('listFollowing', function() {
+   .directive('pagination', function() {
       return {
          replace: true,
          restrict: 'E',
-         controller: 'TableCtrl',
-         templateUrl: 'templateList.html'
+         controller: 'paginationCtrl',
+         templateUrl: 'pagination.html'
       };
    });

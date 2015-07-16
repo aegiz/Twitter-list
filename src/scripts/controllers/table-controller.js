@@ -72,7 +72,6 @@ angular.module('twitterListApp')
             $scope.listOfLists = _.sortBy(data, function (obj) {return obj.name;});
             // Troisième étape : on récupére les xFlw dernières personnes suivies par notre utilisateur (max: 200)
             getTwitterInfos.get('/friends/list?count=' + xFlw).then(function(data) {
-               debugger;
                $scope.users = data.users;
                if(testOnlyNoList) {
                   // Quatrième étape : on score chaque user avec le nombre de liste dans lequel il est présent
