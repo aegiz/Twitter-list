@@ -15,6 +15,7 @@
 
 // TODO & Features (priorétisés)
 
+*  0 - refacto code 
 *  1- Gérer la pagination 
 *  2- merger les deux fonctions testOnlyNoList et initializeTableWithDatas
 *  3- utiliser la méthode getTwitterInfos.get('/users/lookup?user_id=' + item.id) pour en savoir plus sur un user
