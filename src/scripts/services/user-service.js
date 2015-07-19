@@ -1,6 +1,6 @@
 'use strict';
 angular.module('twitterListApp')
-.factory('User', function () {
+.factory('UserService', function () {
    var twitterUser = {
       name: "There"
    };
