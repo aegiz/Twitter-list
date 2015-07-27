@@ -1,34 +1,9 @@
 'use strict';
 
 angular.module('twitterListApp')
-   .controller('TableCtrl', ['$scope', 'getTwitterInfos', 'UserService', 'TableService' ,function($scope, getTwitterInfos, UserService, TableService) {
+   .controller('TableCtrl', ['$scope', 'getTwitterInfos', 'TableService' ,function($scope, getTwitterInfos, TableService) {
 
    $scope.cellToUpdate = [];
-   $scope.UserService = UserService;
-   $scope.name = UserService.name;
-
-   // Watch of login
-   $scope.$watch('UserService.name', function (newVal, oldVal) {
-      if(newVal !== oldVal) {
-         $scope.name = newVal;
-         $scope.login = false;
-         $scope.logout = true;
-         TableService.initializeTableWithDatas(10, false);
-      }
-   });
-
-   // Watch of datas to populate the table
-   $scope.$watch(function () {
-         return TableService.tableDatas;
-      },                       
-      function(newVal, oldVal) {
-         if(newVal !== oldVal) {
-            $scope.listOfLists = newVal.listOfLists;
-            $scope.user = newVal.users;
-            $scope.matrix = newVal.matrix;
-         }
-   }, true);
-
 
    /*
    * Recupère le clic sur les input

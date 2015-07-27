@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('twitterListApp')
-   .controller('paginationCtrl', ['$filter', '$scope', function($filter, $scope) {
+   .controller('PaginationCtrl', ['$filter', '$scope', function($filter, $scope) {
       	// init
 
       	$scope.itemsTEST = [

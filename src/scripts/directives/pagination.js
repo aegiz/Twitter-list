@@ -1,4 +1,4 @@
-'use strict';
+/*'use strict';
 
 angular.module('twitterListApp')
    .directive('pagination', function() {
@@ -8,4 +8,4 @@ angular.module('twitterListApp')
          controller: 'paginationCtrl',
          templateUrl: 'pagination.html'
       };
-   });
+   });*/

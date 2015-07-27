@@ -1,4 +1,4 @@
-'use strict';
+/*'use strict';
 
 angular.module('twitterListApp')
    .directive('listFollowing', function() {
@@ -6,6 +6,6 @@ angular.module('twitterListApp')
          replace: true,
          restrict: 'E',
          controller: 'TableCtrl',
-         templateUrl: 'templateList.html'
+         templateUrl: 'table.html'
       };
-   });
+   });*/

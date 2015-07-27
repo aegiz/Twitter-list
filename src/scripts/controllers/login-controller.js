@@ -1,12 +1,8 @@
 'use strict';
 
 angular.module('twitterListApp')
-   .controller('LoginCtrl', ['$log', '$scope', 'AuthService', 'UserService' , function($log, $scope, AuthService, UserService) {
+   .controller('LoginCtrl', ['$state', '$scope', function($state, $scope) {
       $scope.connect = function() {
-         AuthService.login().then(function(user) {
-            UserService.name = user.name;
-         }, function(error) {
-           console.log(error.message);
-         });
+   		$state.go('inapp.displayData');
       };
    }]);
