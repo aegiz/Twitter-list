@@ -41,6 +41,10 @@ angular.module('states', ['ui.router'])
 	         "pagination": {
 	            templateUrl: 'directives/pagination.html', 
 	            controller: 'PaginationCtrl'
+	         },
+	         "searchBar": {
+	            templateUrl: 'directives/search.html', 
+	            controller: 'SearchCtrl'
 	         }
 	    }
    });

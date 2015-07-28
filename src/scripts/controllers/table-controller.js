@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('twitterListApp')
-   .controller('TableCtrl', ['$scope', 'getTwitterInfos', 'TableService' ,function($scope, getTwitterInfos, TableService) {
+   .controller('TableCtrl', ['$scope', 'TableService' ,function($scope, TableService) {
 
    $scope.cellToUpdate = [];
 

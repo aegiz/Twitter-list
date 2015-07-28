@@ -1,9 +1,9 @@
 'use strict';
 angular.module('twitterListApp')
-.factory('TableService', ['getTwitterInfos', '$q', function(getTwitterInfos, $q) {
-
+.factory('TableService', ['getTwitterInfos', 'InappService', 'SearchService','$q', function(getTwitterInfos, InappService, SearchService, $q) {
+   
    var tableDatas = {};
-
+   
    /*
    * Cette fonction va chercher récursivement pour chaque liste leurs utilisateurs.
    * @param {object} lists. Une arrays contenant toutes les listes créé par l'utilisateur
@@ -100,9 +100,6 @@ angular.module('twitterListApp')
    }
 
    return {
-
-      tableDatas: tableDatas,
-
       /*
       * Recupère les datas à afficher dans le tableau
       * @param {number} xFlw. Le nombre de following à afficher
@@ -113,22 +110,28 @@ angular.module('twitterListApp')
          getTwitterInfos.get('/lists/ownerships').then(function(data) {
             // Deuxième étape: on va récupérer toutes les personnes dans ces listes
             getUsersInLists(data.lists).then(function(data) {
-               tableDatas.listOfLists = _.sortBy(data, function (obj) {return obj.name;});
+               InappService.listOfLists = _.sortBy(data, function (obj) {return obj.name;});
+               tableDatas.listOfLists = _.sortBy(data, function (obj) {return obj.name;}); // TODO clean here!
+
                // Troisième étape : on récupére les xFlw dernières personnes suivies par notre utilisateur (max: 200)
                getTwitterInfos.get('/friends/list?count=' + xFlw).then(function(data) {
-                  tableDatas.users = data.users;
+                  InappService.users = data.users;
                   if(testOnlyNoList) {
                      // Quatrième étape : on score chaque user avec le nombre de liste dans lequel il est présent
-                     tableDatas.scoreList = buildScoreList(_.map(data.users, function(obj) { return _.pick(obj, 'id', 'screen_name'); })); // on ne recupère que les deux valeurs qui ous intéresse
+                     InappService.scoreList = buildScoreList(_.map(data.users, function(obj) { return _.pick(obj, 'id', 'screen_name'); })); // on ne recupère que les deux valeurs qui ous intéresse
                      //Ensuite on trie le tableau en ne récupérant que ceux qui ont un score de 0
                      var scoreListW0 = _.filter(scoreList, function(list) {
                          return list.score === 0;
                      });
                      // Cinquième étape on compare et on trie
                      tableDatas.matrix = buildKeyList(scoreListW0, false);
+                     InappService.matrix = tableDatas.matrix;
+                     SearchService.initSearch(tableDatas.matrix);
                   } else {
                      // Quatrième étape : on compare et on trie
                      tableDatas.matrix = buildKeyList(data.users, true);
+                     InappService.matrix = tableDatas.matrix;
+                     SearchService.initSearch(tableDatas.matrix);
                   }
                });
             });
