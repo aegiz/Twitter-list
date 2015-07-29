@@ -1,24 +1,3 @@
-<!-- <div ng-show="logout">
-   <div class="list-container">
-      <table class="table table-striped table-hover">
-
-         <tr>
-            <td></td>
-            <td ng-repeat="list in listOfLists">{{list.name}}</td>
-         </tr>
-
-         <tr ng-repeat="cellule in matrix">
-            <td>{{ cellule.name }}</td>
-            <td ng-repeat="list in cellule.belongsToList">
-               <input type="checkbox" class="checkbox" value="" name="check" ng-model="list.subscribed" ng-change="handleInputClick(list)">
-            </td>
-         </tr>
-      </table>
-      <button class="submitChanges" ng-click="handleValidation()">Valider</button>
-   </div>
-</div> -->
-
-
 <div>
     <table class="table table-striped table-condensed table-hover">
         <thead>
@@ -36,5 +15,6 @@
             </tr>   
         </tbody>
     </table>
+    <button class="submitChanges" ng-click="handleValidation()">Valider</button>
 </div>
 
