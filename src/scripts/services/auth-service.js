@@ -1,6 +1,6 @@
 'use strict';
 angular.module('twitterListApp')
-.service('Auth', function (HullService) {
+.service('AuthService', function (HullService) {
    this.login = function () {
       return HullService.login();
    };

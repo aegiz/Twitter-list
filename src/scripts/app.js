@@ -22,7 +22,7 @@
 
 */
 
-var twitterListApp = angular.module("twitterListApp", ['ngRoute', 'templates'])
+var twitterListApp = angular.module("twitterListApp", ['ngRoute', 'templates', 'states'])
 
 .config(function(HullServiceProvider) {
   	HullServiceProvider.setHost("https://6e082fcc.hullapp.io");

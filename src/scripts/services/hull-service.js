@@ -32,7 +32,7 @@ angular.module('twitterListApp')
 
       _hullPromise = _initDeferred.promise;
       
-      // Auth 
+      // AuthService 
       _hull.login = function () {
          return _hullPromise.then(function () {
             return _h.login('twitter').then(function (user) {

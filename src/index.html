@@ -3,28 +3,20 @@
 <head>
    <meta charset="utf-8">
 
-   <title>list</title>
+   <title>-</title>
    <meta name="description" content="Hullo, world!">
    <meta name="viewport" content="width=device-width">
-   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
    <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
    <script src="https://hull-js.s3.amazonaws.com/0.8.43/hull.js"></script>
-
+   
 </head>
 <body>
    <div class="main-container" ng-app="twitterListApp">
-      <div class="calmdown">
-         <div>
-            <div class="social-login">Hello {{ name }}</div>
-         </div>
-         <login-button></login-button>
-         <list-following></list-following>
-      </div>
+      <div ui-view></div>
    </div>
    <script src="assets/scripts/all.js"></script>
    <script src="assets/scripts/templates.js"></script>
-</body>
 </body>
 </html>

@@ -1,24 +1,25 @@
 {
-  "name": "Sleekapp",
+  "name": "TwitterList",
   "version": "0.0.1",
-  "description": "Sleek Website",
+  "description": "Side Project about Twitter lists",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tigerlily/sleekapp.git"
+    "url": "https://github.com/aegiz/Twitter-list"
   },
   "keywords": [
-    "sleek"
+    "Twitter",
+    "lists"
   ],
-  "author": "Mathieu Fosse",
+  "author": "Adrien Rahier",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tigerlily/sleekapp/issues"
+    "url": "https://github.com/aegiz/Twitter-list"
   },
-  "homepage": "https://github.com/tigerlily/sleekapp",
+  "homepage": "https://github.com/aegiz/Twitter-list",
   "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-angular-templatecache": "^1.6.0",
