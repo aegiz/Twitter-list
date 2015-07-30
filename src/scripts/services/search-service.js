@@ -15,7 +15,7 @@ angular.module('twitterListApp')
          return true;
       });
       PaginationService.groupToPages(filteredItems);
-   }
+   };
 
    this.search = function (matrix, query) {
       filteredItems = $filter('filter')(matrix, function (item) {

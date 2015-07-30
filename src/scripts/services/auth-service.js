@@ -4,6 +4,7 @@ angular.module('twitterListApp')
    this.login = function () {
       return HullService.login();
    };
+   
    this.logout = function () {
       return HullService.logout();
    };

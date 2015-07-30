@@ -7,7 +7,7 @@ angular.module('twitterListApp')
 
       // Launch table initialization
 
-      TableService.initializeTableWithDatas(100, false);
+      TableService.initializeTableWithDatas(100);
 
       $scope.$watch(function () {
          return InappService.listOfLists;

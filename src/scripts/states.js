@@ -34,17 +34,21 @@ angular.module('states', ['ui.router'])
     .state('inapp.displayData', {
 	   	url : '/twitterlist',
 	   	views: { 
-	        "table": {
-	            templateUrl: 'directives/table.html', 
-	            controller: 'TableCtrl'
-	          },
+	         "table": {
+	         	templateUrl: 'directives/table.html', 
+	         	controller: 'TableCtrl'
+	         },
 	         "pagination": {
-	            templateUrl: 'directives/pagination.html', 
-	            controller: 'PaginationCtrl'
+	         	templateUrl: 'directives/pagination.html', 
+	         	controller: 'PaginationCtrl'
 	         },
 	         "searchBar": {
-	            templateUrl: 'directives/search.html', 
-	            controller: 'SearchCtrl'
+	         	templateUrl: 'directives/search.html', 
+	         	controller: 'SearchCtrl'
+	         },
+	         "filters": {
+	         	templateUrl: 'directives/filters.html', 
+	         	controller: 'FiltersCtrl'
 	         }
 	    }
    });

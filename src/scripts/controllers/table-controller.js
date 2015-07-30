@@ -19,7 +19,7 @@ angular.module('twitterListApp')
       if(infos.subscribed !== infos.init_subscribed) {
          $scope.cellToUpdate.push({
             "name": infos.user_id + "-" + infos.list_id,
-            "monObj" : infos,
+            "infosOnAction" : infos,
             "actionTodo": (infos.subscribed) ? "create" : "destroy"
          });         
       } else {
@@ -39,7 +39,7 @@ angular.module('twitterListApp')
    $scope.handleValidation = function() {
       TableService.subscribeUsers($scope.cellToUpdate).then(function(data) {
          _.each($scope.cellToUpdate, function(cell) {
-            cell.monObj.init_subscribed = cell.monObj.subscribed;
+            cell.infosOnAction.init_subscribed = cell.infosOnAction.subscribed;
          });
          $scope.cellToUpdate = [];
       });
