@@ -1,1 +1,2 @@
-<label><input type="checkbox" name="checkbox" value="value" ng-model="checked" ng-click="filter(checked)"> Select only users without lists</label>
+<label><input type="checkbox" name="checkbox" value="value" ng-model="checkWithoutList" ng-click="filterWithoutList(checkWithoutList)" ng-disabled="checkWithMultipleLists"> Select only users without lists</label>
+<label><input type="checkbox" name="checkbox" value="value" ng-model="checkWithMultipleLists" ng-click="filterWithMultipleLists(checkWithMultipleLists)" ng-disabled="checkWithoutList"> Select only users with Multiple lists</label>

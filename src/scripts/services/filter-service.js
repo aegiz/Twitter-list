@@ -1,7 +1,18 @@
 'use strict';
 angular.module('twitterListApp')
 .service('FiltersService', ['TableService', function(TableService) {
-   this.filter = function (checked) {
-      TableService.filterTable(checked);
-   };
+	this.filterWithoutList = function (checked) {
+		if(checked) {
+			TableService.filterTable("withoutList");
+		} else {
+			TableService.filterTable("noFilter");
+		}
+	};
+	this.filterWithMultipleLists = function (checked) {
+		if(checked) {
+			TableService.filterTable("withMultipleLists");
+		} else {
+			TableService.filterTable("noFilter");
+		}
+	};
 }]);

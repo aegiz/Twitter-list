@@ -2,8 +2,7 @@
 
 angular.module('states', ['ui.router'])
 .config(function ($urlRouterProvider, $stateProvider) {
-	// if the path doesn't match any of the urls you configured
-	// otherwise will take care of routing the user to the specified url
+	// if the path doesn't match any of the urls
 	$urlRouterProvider
 	.otherwise('/');
 	
@@ -18,7 +17,7 @@ angular.module('states', ['ui.router'])
 		templateUrl: 'inapp.html',
 		controller: 'InappCtrl',
 		resolve: {
-			currentUser: function ($state, $location, $rootScope, AuthService, TableService) {
+			loginUser: function ($state, $location, $rootScope, AuthService, TableService) {
 				if($state.current.name !== "root") { // Prevent user to start if he was not on login page
 					$location.path('/');
 				} else {

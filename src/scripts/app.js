@@ -19,7 +19,6 @@ https://docs.google.com/document/d/1TBk5tUSIVYM1dcukVYTBt83LoD2CW_kOJKBGHwTjXTA/
 // TODO & Features (priorétisés)
 
 
-* 0 - Selectionner tous les gens avec plus de 1 liste
 * 1 - exterioriser le nombre d'item par page pour donner la main à l'utilisateur sur ce nombre
 * 2 - Chainer les calls aux user / Sauf quand plus de 1700 following
 * 3 - utiliser la méthode getTwitterInfos.get('/users/lookup?user_id=' + item.id) pour en savoir plus sur un user
