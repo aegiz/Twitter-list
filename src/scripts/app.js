@@ -30,7 +30,15 @@ https://docs.google.com/document/d/1TBk5tUSIVYM1dcukVYTBt83LoD2CW_kOJKBGHwTjXTA/
 var twitterListApp = angular.module("twitterListApp", ['ngRoute', 'templates', 'states'])
 
 .config(function(HullServiceProvider) {
-  	HullServiceProvider.setHost("https://6e082fcc.hullapp.io");
-  	HullServiceProvider.setAppId("54db24c7e4bd981bee000281");
+	HullServiceProvider.setHost("https://6e082fcc.hullapp.io");
+	HullServiceProvider.setAppId("54db24c7e4bd981bee000281");
 })
 
+.run(function ($rootScope, $state) {
+	$rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+		console.log(error);
+		if (error === 'user-not-logged-in') {
+			$state.transitionTo('root');
+		}
+	});
+})

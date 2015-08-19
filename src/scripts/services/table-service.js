@@ -1,6 +1,6 @@
 'use strict';
 angular.module('twitterListApp')
-.service('TableService', ['getTwitterInfos', 'InappService', 'SearchService','$q', function(getTwitterInfos, InappService, SearchService, $q) {
+.service('TableService', ['getTwitterInfos', 'InappService', 'SearchService','$q', '$state', function(getTwitterInfos, InappService, SearchService, $q, $state) {
    
    var listOfLists,
       users,
@@ -156,9 +156,9 @@ angular.module('twitterListApp')
                InappService.users = users = data.users;
                InappService.scoreList = scoreList = buildScoreList(_.map(users, function(obj) { return _.pick(obj, 'id', 'screen_name'); })); // on ne recupère que les deux valeurs qui ous intéresse
                InappService.matrix = matrix = buildKeyList(users, true);
-
                // Cinquième étape: initialisation des composants tierces
                SearchService.initSearch(matrix);
+               $state.go('inapp.displayData');
             });
          });
       }, function (error) {

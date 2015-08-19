@@ -2,7 +2,6 @@
 <html>
 <head>
    <meta charset="utf-8">
-
    <title>-</title>
    <meta name="description" content="Hullo, world!">
    <meta name="viewport" content="width=device-width">
@@ -10,7 +9,7 @@
    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
    <script src="https://hull-js.s3.amazonaws.com/0.8.43/hull.js"></script>
-   
+   <base href="/">
 </head>
 <body>
    <div class="main-container" ng-app="twitterListApp">
@@ -18,5 +17,8 @@
    </div>
    <script src="assets/scripts/all.js"></script>
    <script src="assets/scripts/templates.js"></script>
+   <script>
+   console.log("URL actuel " + document.URL);
+   </script>
 </body>
 </html>
