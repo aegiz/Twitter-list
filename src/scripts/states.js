@@ -18,16 +18,20 @@ angular.module('states', ['ui.router'])
 		templateUrl: 'inapp.html',
 		controller: 'InappCtrl',
 		resolve: {
-			currentUser: function ($rootScope, AuthService, TableService) {
-				AuthService.login().then(function (user) {
-					if (user) {
-						$rootScope.currentUser = user;
-						  // Launch table initialization
-						TableService.initializeTableWithDatas(100);
-					} else {
-						deferred.reject('user-not-logged-in');
-					}
-				});
+			currentUser: function ($state, $location, $rootScope, AuthService, TableService) {
+				if($state.current.name !== "root") { // Prevent user to start if he was not on login page
+					$location.path('/');
+				} else {
+					AuthService.login().then(function (user) {
+						if (user) {
+							$rootScope.currentUser = user;
+							// Launch table initialization
+							TableService.initializeTableWithDatas(100);
+						} else {
+							$location.path('/');
+						}
+					});
+				}
 			}
 		}
 	})

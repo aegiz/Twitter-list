@@ -7,8 +7,6 @@ https://docs.google.com/document/d/1TBk5tUSIVYM1dcukVYTBt83LoD2CW_kOJKBGHwTjXTA/
 // TODO & Features (non priorétisés)
 
 /*
-*  Mettre un loading de chargement pendant la récupération des données
-*  Bug quand l'utilisateur clic sur le bouton mais ne se log pas dans la popup
 *  Au scroll faire aussi descendre l'axe des abscisses pour pouvoir continuer à suivre les listes
 *  Au clic sur une rangée : afficher (dans une popup?) plus d'informations sur l'utilisateur.
 *  Pouvoir nottamment unfollow un utilisateur et le supprimer par la même occasion des listes dans lesquelles il était.
@@ -16,7 +14,7 @@ https://docs.google.com/document/d/1TBk5tUSIVYM1dcukVYTBt83LoD2CW_kOJKBGHwTjXTA/
 *  Prévoir le fait que l'utilisateur ait 40 listes
 *  Prévoir le fait que l'utilisateur ait 0 liste
 *  Bug connu : une fois la tâche subscribeUsers done, updater $scope.matrix sinon les users qui n'avaient pas de listes initialement apparaissent quand même alors que l'on vient de les subscribe
-*  
+*  Mobile ?
 
 // TODO & Features (priorétisés)
 
@@ -34,11 +32,8 @@ var twitterListApp = angular.module("twitterListApp", ['ngRoute', 'templates', '
 	HullServiceProvider.setAppId("54db24c7e4bd981bee000281");
 })
 
-.run(function ($rootScope, $state) {
+.run(function ($rootScope, $state, $location) {
 	$rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
 		console.log(error);
-		if (error === 'user-not-logged-in') {
-			$state.transitionTo('root');
-		}
 	});
 })
