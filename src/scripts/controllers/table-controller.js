@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('twitterListApp')
-   .controller('TableCtrl', ['$scope', 'TableService' ,function($scope, TableService) {
+   .controller('TableCtrl', ['$scope', 'TableService', '$timeout', function($scope, TableService, $timeout) {
 
    $scope.cellToUpdate = [];
 
@@ -37,11 +37,15 @@ angular.module('twitterListApp')
    */
 
    $scope.handleValidation = function() {
-      TableService.subscribeUsers($scope.cellToUpdate).then(function(data) {
+      TableService.subscribeUsers($scope.cellToUpdate).then(function() {
          _.each($scope.cellToUpdate, function(cell) {
             cell.infosOnAction.init_subscribed = cell.infosOnAction.subscribed;
          });
          $scope.cellToUpdate = [];
+         $scope.showConfirmationMsg = true;
+         $timeout(function() {
+            $scope.showConfirmationMsg = false;
+         }, 3000);
       });
    };
 
