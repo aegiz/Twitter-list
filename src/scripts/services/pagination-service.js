@@ -2,7 +2,7 @@
 // From : http://jsfiddle.net/SAWsA/11/ 
 angular.module('twitterListApp')
 .service('PaginationService', ['getTwitterInfos', 'InappService', '$filter', function(getTwitterInfos, InappService, $filter) {
-   var itemsPerPage = 5;
+   var itemsPerPage = 100;
 
    /*
    * Regroupe la liste d'item en sous groupes

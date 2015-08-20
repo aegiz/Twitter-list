@@ -13,7 +13,7 @@ angular.module('states', ['ui.router'])
 		controller: 'LoginCtrl',
 	})
 	.state('inapp', {
-		abstract: true,	   	
+		abstract: true,
 		templateUrl: 'inapp.html',
 		controller: 'InappCtrl',
 		resolve: {
@@ -25,7 +25,7 @@ angular.module('states', ['ui.router'])
 						if (user) {
 							$rootScope.currentUser = user;
 							// Launch table initialization
-							TableService.initializeTableWithDatas(100);
+							TableService.initializeTableWithDatas();
 						} else {
 							$location.path('/');
 						}

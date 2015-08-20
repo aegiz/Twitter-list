@@ -7,6 +7,9 @@ https://docs.google.com/document/d/1TBk5tUSIVYM1dcukVYTBt83LoD2CW_kOJKBGHwTjXTA/
 // TODO & Features (non priorétisés)
 
 /*
+*  Gérer le cas où la personne a plus de 2800 followings
+*  La pagination est lente ...
+*  Indicateur visuel comme quoi la soubscription c'est bien passé
 *  Au scroll faire aussi descendre l'axe des abscisses pour pouvoir continuer à suivre les listes
 *  Au clic sur une rangée : afficher (dans une popup?) plus d'informations sur l'utilisateur.
 *  Pouvoir nottamment unfollow un utilisateur et le supprimer par la même occasion des listes dans lesquelles il était.
@@ -19,9 +22,7 @@ https://docs.google.com/document/d/1TBk5tUSIVYM1dcukVYTBt83LoD2CW_kOJKBGHwTjXTA/
 // TODO & Features (priorétisés)
 
 
-* 1 - exterioriser le nombre d'item par page pour donner la main à l'utilisateur sur ce nombre
-* 2 - Chainer les calls aux user / Sauf quand plus de 1700 following
-* 3 - utiliser la méthode getTwitterInfos.get('/users/lookup?user_id=' + item.id) pour en savoir plus sur un user
+* utiliser la méthode getTwitterInfos.get('/users/lookup?user_id=' + item.id) pour en savoir plus sur un user
 */
 
 var twitterListApp = angular.module("twitterListApp", ['ngRoute', 'templates', 'states'])
