@@ -7,8 +7,12 @@ angular.module('twitterListApp')
 				Hull.api({
 					provider:'twitter',
 					path: url
-				}, 'get').then(function (response) {
+				}, 'get')
+				.then(function (response) {
 					defered.resolve(response);
+				})
+				.catch(function (err) {
+					deferred.reject(err);
 				});
 				return defered.promise;
 			},

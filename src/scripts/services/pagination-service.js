@@ -22,7 +22,7 @@ angular.module('twitterListApp')
       InappService.pagedItems = pagedItems;
    };
 
-   this.setNewPage =function(newValue) {
+   this.setNewPage = function(newValue) {
       InappService.currentPage = newValue;
    };
 }]);
