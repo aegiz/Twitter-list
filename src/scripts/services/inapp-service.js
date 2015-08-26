@@ -5,7 +5,6 @@ angular.module('twitterListApp')
 			users = [],
 			scoreList = [],
 			matrix = [],
-			paginationDatas = [],
    			currentPage = 0,
 			pagedItems = [];
 
@@ -14,7 +13,6 @@ angular.module('twitterListApp')
 			users: users,
 			scoreList: scoreList,
 			matrix: matrix,
-			paginationDatas: paginationDatas,
 			currentPage: currentPage,
 			pagedItems: pagedItems,
 		};
