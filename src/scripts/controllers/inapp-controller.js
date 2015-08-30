@@ -26,7 +26,7 @@ angular.module('twitterListApp')
 	/*
 	* users: 
 	* Cette array contient une collection des followings de notre utilisateur. users = [Object, Object, ...]
-	* Le role de users est de pouvoir repertorier tous les users afin de construire $scope.matrix + d'établir la scorelist
+	* Le role de users est de pouvoir repertorier tous les users afin de construire $scope.matrix
 	*/
 
 	$scope.$watch(function () {
@@ -37,20 +37,7 @@ angular.module('twitterListApp')
 		}
 	}, true);
 
-	/*
-	* scoreList: 
-	* Cette array contient une copie de users à la différence près que chaque user a maintenant un score propre en fonction du nombre de liste dans lequel il se trouve
-	* Le role de scoreList est de pouvoir récupérer facilement une liste d'utilisateur ayant 0 ou plus de deux listes lors du clic sur les deux input de filtres
-	*/
-
-	$scope.$watch(function () {
-		return InappService.scoreList;
-	}, function(newVal, oldVal) {
-		if(newVal !== oldVal) {
-			$scope.scoreList = newVal;
-		}
-	}, true);
-
+	
 	/*
 	* matrix: 
 	* Cette array contient une copie de users à la différence près que chaque user a maintenant un objet belongsToList associé. Dans cet objet on précise si oui ou non le user appartient à la liste correspondante

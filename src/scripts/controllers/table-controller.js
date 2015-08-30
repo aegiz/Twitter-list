@@ -17,15 +17,15 @@ angular.module('twitterListApp')
 
 	$scope.handleInputClick = function(infos) {
 		if(infos.subscribed !== infos.init_subscribed) {
+			infos.actionTodo = (infos.subscribed) ? "create" : "destroy";
 			$scope.cellToUpdate.push({
-				"name": infos.user_id + "-" + infos.list_id,
-				"infosOnAction" : infos,
-				"actionTodo": (infos.subscribed) ? "create" : "destroy"
-			});         
+				"nameCell": infos.user_id + "-" + infos.list_id,
+				"infosCell" : infos
+			});
 		} else {
 			// Cancel in cellToUpdate the action of creating or deleting someone
 			$scope.cellToUpdate = _.filter($scope.cellToUpdate, function(el) {
-				return el.name !== infos.user_id + "-" + infos.list_id;
+				return el.nameCell !== infos.user_id + "-" + infos.list_id;
 			});
 		}
 	};
@@ -38,15 +38,10 @@ angular.module('twitterListApp')
 
    	$scope.handleValidation = function() {
 		TableService.subscribeUsers($scope.cellToUpdate).then(function() {
-			// Update the matrix values
-			_.each($scope.cellToUpdate, function(cell) {
-				cell.infosOnAction.init_subscribed = cell.infosOnAction.subscribed;
-			});
-
-			// Update of ListOfList & ScoreList
+			// Update Matrix and ListOfList
+			TableService.updateMatrix($scope.cellToUpdate);
 			TableService.updateListOfList($scope.cellToUpdate);
-			TableService.updateScoreList($scope.cellToUpdate);
-
+			
 			$scope.cellToUpdate = [];
 			$scope.showConfirmationMsg = true;
 			$timeout(function() {

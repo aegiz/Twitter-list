@@ -4,13 +4,13 @@ angular.module('twitterListApp')
 	
 	var that = this;
 	
-   	/*
-   	* Cette fonction va chercher récursivement pour chaque liste leurs utilisateurs.
-   	* @param {object} lists. Une arrays contenant toutes les listes créées par l'utilisateur
-   	* @return {Object} listOfLists une array d'arrays
-   	*/
+	/*
+	* Cette fonction va chercher récursivement pour chaque liste leurs utilisateurs.
+	* @param {object} lists. Une arrays contenant toutes les listes créées par l'utilisateur
+	* @return {Object} listOfLists une array d'arrays
+	*/
 
-   	function getUsersInLists(lists) {
+	function getUsersInLists(lists) {
 		var deferred = $q.defer();
 		var finalList = [];
 		var loadLists = function (index) {
@@ -30,71 +30,51 @@ angular.module('twitterListApp')
 		};
 		loadLists(0);
 		return deferred.promise;
-   	}
+	}
 
 	/*
-   	* A partir d'une liste d'utilisateurs retourne un object contenant toutes les infos pour une cellule
-   	* @param {Object} users : Une arrays contenant tous les utilisateurs
-   	* @return {Object} followingList.belongTo : une arrray des lists dans lequel est présent le user + l'id du user et l'id de la liste
-   	*/
+	* A partir d'une liste d'utilisateurs retourne une matrice contenant toutes les infos pour une cellule
+	* @param {Object} users : Une arrays contenant tous les utilisateurs
+	* @return {Object} followingList.belongTo : une arrray des lists dans lequel est présent le user + l'id du user et l'id de la liste
+	*/
 
-   	function buildKeyList(users) {
-		var followingList = [];
-		_.each(users, function(userRow) {			
+	function buildMatrix(users) {
+		var matrix = [];
+		_.each(users, function(user) {          
 			var belongsToList = {},
 				userInfos = {};
-			userInfos.name = userRow.screen_name;
+			userInfos.name = user.screen_name;
+			userInfos.id = user.id;
+			userInfos.score = 0;
 			_.each(InappService.listOfLists, function(list) {
-				var followList = (_.filter(list.users, function(user) {
-					return user.id === userRow.id;
+				var followList = (_.filter(list.users, function(usr) {
+					return usr.id === user.id;
 					  }).length === 0) ? false : true; // Si l'utilisateur se trouve dans la liste => true sinon false
 				belongsToList[list.name] = {
 					"list_id": list.id,
-					"user_id": userRow.id,
+					"user_id": user.id,
 					"init_subscribed": followList,
 					"subscribed": followList
 				};
-			});
-			userInfos.belongsToList = belongsToList;
-			followingList.push(userInfos);
-		});
-		return followingList;
-   	}
-
-   /*
-   * Pour chaque ids de personne suivi on établit un score de nombre de listes dans lequel il est présent
-   * @param {Object} users. Une arrays contenant tous utilisateur
-   * @return {Object} score {id,score,screen_name} des infos sur le user et son score
-   */
-
-   	function buildScoreList(users) {
-		var score = [];
-		_.each(users, function(user) {
-			var infoUser = {
-				"id": user.id,
-				"screen_name": user.screen_name,
-				"score": 0
-			};
-			_.each(InappService.listOfLists, function(list) {
 				if(_.filter(list.users, function(usr) {
 					return usr.id === user.id;
 				}).length !== 0) {
-					infoUser.score ++;
+					userInfos.score ++;
 				}
 			});
-			score.push(infoUser);
+			userInfos.belongsToList = belongsToList;
+			matrix.push(userInfos);
 		});
-		return score;
-   	}
+		return matrix;
+	}
 
+	/*
+	* Enchaine des calls pour récupérer les followings
+	* @param {Object} users. Une arrays contenant tous utilisateur
+	* @return {Object} score {id,score,screen_name} des infos sur le user et son score
+	*/
 
-   	/*
-   	* Enchaine des calls pour récupérer les followings
-   	* @param {Object} users. Une arrays contenant tous utilisateur
-   	* @return {Object} score {id,score,screen_name} des infos sur le user et son score
-   	*/
-
-   	function getFollowings(callToDo) {
+	function getFollowings(callToDo) {
 		var deferred = $q.defer();
 		var followings = [];
 		var callToDo = callToDo;
@@ -117,14 +97,14 @@ angular.module('twitterListApp')
 		getFollowing(-1);
 
 		return deferred.promise;
-   	}
+	}
 
-   	/*
-   	* Lance tous les calls de subsciption/unsubscription sur les différents users
-   	* @param {Object} items. Une arrays d'objects contenant : l'action to do (destroy ou create) et divers type d'info (infosOnAction) sur la list le user etc.
-   	*/
+	/*
+	* Lance tous les calls de subsciption/unsubscription sur les différents users
+	* @param {Array} items. 
+	*/
 
-   	this.subscribeUsers = function(items) {
+	this.subscribeUsers = function(items) {
 		var deferred = $q.defer();
 		var subscribe = function (index) {
 			var item = items[index];
@@ -132,7 +112,7 @@ angular.module('twitterListApp')
 				deferred.resolve("ok");
 				return;
 			}
-			getTwitterInfos.post('/lists/members/' + item.actionTodo + '?list_id=' + item.infosOnAction.list_id + '&user_id=' + item.infosOnAction.user_id)
+			getTwitterInfos.post('/lists/members/' + item.infosCell.actionTodo + '?list_id=' + item.infosCell.list_id + '&user_id=' + item.infosCell.user_id)
 			.then(function (data) {
 				subscribe(++index); // recursif
 			})
@@ -144,78 +124,82 @@ angular.module('twitterListApp')
 		subscribe(0);
 
 		return deferred.promise;
-   	};
+	};
 
-   	/*
-   	* Update de listOflist
-   	*/
+	/*
+	* Update de listOflist (TODO : improve this function)
+	*/
 
-   	this.updateListOfList = function(usersToUpdate) {
-   		var updatedListOfList = InappService.listOfLists;
-   		_.each(usersToUpdate, function(userToUpdate) {
-			_.find(updatedListOfList, function(list) {
-			    if(list.id === userToUpdate.infosOnAction.list_id) {
-			    	// Add new user to array
-			   		if(userToUpdate.actionTodo === "create"	) {
-			   			list.users.push({id: userToUpdate.infosOnAction.user_id});
-			   		// Remove user to Array
-			   		} else {
-			   			for(var i = 0; i< list.users.length; i++) {
-							if(list.users[i].id === userToUpdate.infosOnAction.user_id) {
-						    	list.users.splice(i, 1);
-						    }
+	this.updateListOfList = function(usersToUpdate) {
+		var updatedListOfList = InappService.listOfLists;
+		_.each(usersToUpdate, function(userToUpdate) {
+			_.each(updatedListOfList, function(list) {
+				if(list.id === userToUpdate.infosCell.list_id) {
+					// Add new user to array
+					if(userToUpdate.infosCell.actionTodo === "create" ) {
+						list.users.push({id: userToUpdate.infosCell.user_id});
+					// Remove user to Array
+					} else {
+						for(var i = 0; i< list.users.length; i++) {
+							if(list.users[i].id === userToUpdate.infosCell.user_id) {
+								list.users.splice(i, 1);
+							}
 						}
-			   		}
-			   	}
+					}
+				}
 			});
-   		});   		
-   	};
+		});         
+	};
 
-   	/*
-   	* Update de la score list
-   	*/
+	/*
+	* Update Matrix (score + belongsToList)
+	*/
 
-   	this.updateScoreList = function(usersToUpdate) {
-   		var updatedScoreList = InappService.scoreList;
-   		_.each(usersToUpdate, function(userToUpdate) {
-			_.find(updatedScoreList, function(cell){
-			    if(cell.id === userToUpdate.infosOnAction.user_id) {
-			   		cell.score = ((userToUpdate.actionTodo === "create") ? cell.score + 1 : cell.score - 1);
-			   	};
+	this.updateMatrix = function(usersToUpdate) {
+		var updatedMatrix = InappService.matrix;
+		_.each(updatedMatrix, function(usr) {
+			_.each(usersToUpdate, function(userToUpdate) {
+				if(usr.id === userToUpdate.infosCell.user_id) {
+					// Updating score
+					usr.score = ((userToUpdate.infosCell.actionTodo === "create") ? usr.score + 1 : usr.score - 1);
+					// Updating list belongings
+					var listToUpdate = _.findWhere(usr.belongsToList,{list_id:userToUpdate.infosCell.list_id});
+					listToUpdate.init_subscribed = listToUpdate.subscribed;
+				}
 			});
-   		});
-   		InappService.scoreList = updatedScoreList;
-   	};
+		});
+		InappService.matrix = updatedMatrix;
+	};
 
-   	/*
-   	* Patch la valeur matrix du tableau en fonction de la valeur de la checkbox  Select only users without lists
-   	* @param {Boolean} toFilter. true: filter sinon rétablir
-   	*/
+	/*
+	* Filtre l'objet matrix pour ne garder que les users qui nous intéresse
+	* @param {String} toFilter.
+	*/
 
-   	this.filterTable = function(toFilter) {
+	this.filterTable = function(toFilter) {
+		var updatedMatrix = InappService.matrix;
 		if(toFilter === "withoutList") {
-			var scoreListW0 = _.filter(InappService.scoreList, function(list) {
-				return list.score === 0;
+			InappService.matrix = _.reject(updatedMatrix, function(item) {
+				return item.score !== 0;
 			});
-			InappService.matrix = buildKeyList(scoreListW0);
 			SearchService.initSearch(InappService.matrix);
+
 		} else if(toFilter === "withMultipleLists") {
-			var scoreListWM = _.filter(InappService.scoreList, function(list) {
-				return list.score > 1;
+			InappService.matrix = _.reject(updatedMatrix, function(item) {
+				return item.score === 0 || item.score === 1 ;
 			});
-			InappService.matrix = buildKeyList(scoreListWM);
 			SearchService.initSearch(InappService.matrix);
 		} else {
-			InappService.matrix = buildKeyList(InappService.users);
+			InappService.matrix = buildMatrix(InappService.users);
 			SearchService.initSearch(InappService.matrix);
 		}
-   	};
+	};
 
-   	/*
-   	* Recupère les datas à afficher dans le tableau
-   	*/
+	/*
+	* Recupère les datas à afficher dans le tableau
+	*/
 
-   	this.initializeTableWithDatas = function() {
+	this.initializeTableWithDatas = function() {
 		// First step : on récupère toutes les listes créé par notre utilisateur
 		getTwitterInfos.get('/lists/ownerships').then(function(data) {
 			// Deuxième étape: on va récupérer toutes les personnes dans ces listes
@@ -234,10 +218,9 @@ angular.module('twitterListApp')
 					// If more than 2800 followings
 					if (callToDo > 15) {
 						getFollowings(15).then(function(userResult) {
-					   		// Quatrième étape: construit la score list, la matrix et les users
+							// Quatrième étape: construit la score list, la matrix et les users
 							InappService.users = _.flatten(userResult);
-							InappService.scoreList = buildScoreList(_.map(InappService.users, function(obj) { return _.pick(obj, 'id', 'screen_name'); })); // on ne recupère que les deux valeurs qui ous intéresse
-							InappService.matrix = buildKeyList(InappService.users);
+							InappService.matrix = buildMatrix(InappService.users);
 							// Cinquième étape: initialisation des composants tierces
 							SearchService.initSearch(InappService.matrix);
 							$state.go('inapp.displayData');
@@ -245,10 +228,9 @@ angular.module('twitterListApp')
 						});
 					} else {
 						getFollowings(callToDo).then(function(userResult) {
-					   		// Quatrième étape: construit la score list, la matrix et les users
+							// Quatrième étape: construit la score list, la matrix et les users
 							InappService.users = _.flatten(userResult);
-							InappService.scoreList = buildScoreList(_.map(InappService.users, function(obj) { return _.pick(obj, 'id', 'screen_name'); })); // on ne recupère que les deux valeurs qui ous intéresse
-							InappService.matrix = buildKeyList(InappService.users);
+							InappService.matrix = buildMatrix(InappService.users);
 							// Cinquième étape: initialisation des composants tierces
 							SearchService.initSearch(InappService.matrix);
 							$state.go('inapp.displayData');
