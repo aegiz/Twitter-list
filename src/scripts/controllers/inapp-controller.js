@@ -3,16 +3,16 @@
 angular.module('twitterListApp')
 .controller('InappCtrl', ['$scope', 'InappService', '$state', function($scope, InappService, $state) {
 	
-	// Watch all the variables
+	// Watch of all the variables
 
 	/*
 	* listOfLists: 
-	* Cette array contient toutes les infos relatives aux listes créées par notre user
-	* Au niveau de sa structure listOfLists = [Object, Object, ...] chaque Object representant ici une liste créée.
-	* Au sein d'une liste on trouve les propriétés suivantes : {id: ,name:, user: Array }. 
-	* La propriété users est elle aussi une array contenant tous les users présents dans cette liste au moment de l'initialisation de l'application
-	* 
-	* Le role de listOfLists est d'aider au calcul du score d'un utilisateur (lors de l'initialisation et de la validation)
+	* This array hold all the infos relative to the lists created by the connected user
+	* Structure: listOfLists = [Object, Object, ...] where Object is a single list.
+	* A single list has these properties: {id: ,name:, user: Array }. 
+	* ... Where users is an array of users contains in the list
+	
+	* Obj: listOfLists is handy when we have to calculate the score of a following (step performed during init and validation)
 	*/
 
 	$scope.$watch(function () {
@@ -25,8 +25,10 @@ angular.module('twitterListApp')
 
 	/*
 	* users: 
-	* Cette array contient une collection des followings de notre utilisateur. users = [Object, Object, ...]
-	* Le role de users est de pouvoir repertorier tous les users afin de construire $scope.matrix
+	* A collection of all the people our connected user follow. 
+	* Structure: users = [Object, Object, ...] 
+
+	* Obj: users' object help to build the matrix (step performed during init and reset of user after some clicks on the filtering)
 	*/
 
 	$scope.$watch(function () {
@@ -40,8 +42,10 @@ angular.module('twitterListApp')
 	
 	/*
 	* matrix: 
-	* Cette array contient une copie de users à la différence près que chaque user a maintenant un objet belongsToList associé. Dans cet objet on précise si oui ou non le user appartient à la liste correspondante
-	* Le role de matrix est de pouvoir être utilisé pour construire un nouvel objet pagedItems qui lui sera utilisé pour l'affichage
+	* This Array is a copy of users' object. The difference is that in each user there is an associated belongsToList object. 
+	* in belongsToList we list if the current person belong to the list or not.
+
+	* Obj: matrix is used to build a new object pagedItems
 	*/
 
 	$scope.$watch(function () {
@@ -54,8 +58,9 @@ angular.module('twitterListApp')
 
 	/*
 	* pagedItems: 
-	* Cette array est construite à partir de la décomposition de matrix en sous page
-	* La vue du tableau 
+	* This Array is build construite from matrix decomposition in sub-pages
+
+	* Obj: pagedItems is specially dedicated to display the informations on the screen
 	*/
 
 	$scope.$watch(function () {
@@ -68,7 +73,8 @@ angular.module('twitterListApp')
 
 	/*
 	* currentPage: 
-	* un int qui nous permets de naviguer entre les différente valeur de pagedItems 
+	* thi int is dedicated to page's navigation (technically it's the index of pagedItems)
+	* So when it's value change the able view is updated
 	*/
 
 	$scope.$watch(function () {

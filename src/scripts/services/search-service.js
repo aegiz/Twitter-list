@@ -10,13 +10,6 @@ angular.module('twitterListApp')
 		return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
 	};
 
-	this.initSearch = function(matrix) {
-		filteredItems = $filter('filter')(matrix, function (item) {
-			return true;
-		});
-		PaginationService.groupToPages(filteredItems);
-	};
-
 	this.search = function (matrix, query) {
 		filteredItems = $filter('filter')(matrix, function (item) {
 			if (searchMatch(item.name, query)) {

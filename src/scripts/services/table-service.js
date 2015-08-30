@@ -1,13 +1,13 @@
 'use strict';
 angular.module('twitterListApp')
-.service('TableService', ['getTwitterInfos', 'InappService', 'SearchService','$q', '$state', function(getTwitterInfos, InappService, SearchService, $q, $state) {
+.service('TableService', ['getTwitterInfos', 'InappService', 'SearchService', 'PaginationService', '$q', '$state', function(getTwitterInfos, InappService, SearchService, PaginationService, $q, $state) {
 	
 	var that = this;
 	
 	/*
-	* Cette fonction va chercher récursivement pour chaque liste leurs utilisateurs.
-	* @param {object} lists. Une arrays contenant toutes les listes créées par l'utilisateur
-	* @return {Object} listOfLists une array d'arrays
+	* Get users' infos from a set of lists he owns.
+	* @param {Object} lists. An array of lists the user owns.
+	* @return {Object} listOfLists An array with gathering the infos.
 	*/
 
 	function getUsersInLists(lists) {
@@ -36,9 +36,9 @@ angular.module('twitterListApp')
 	}
 
 	/*
-	* A partir d'une liste d'utilisateurs retourne une matrice contenant toutes les infos pour une cellule
-	* @param {Object} users : Une arrays contenant tous les utilisateurs
-	* @return {Object} followingList.belongTo : une arrray des lists dans lequel est présent le user + l'id du user et l'id de la liste
+	* Build the matrix object from a list of users
+	* @param {Object} users : An array of users
+	* @return {Object} matrix
 	*/
 
 	function buildMatrix(users) {
@@ -52,7 +52,7 @@ angular.module('twitterListApp')
 			_.each(InappService.listOfLists, function(list) {
 				var followList = (_.filter(list.users, function(usr) {
 					return usr.id === user.id;
-					  }).length === 0) ? false : true; // Si l'utilisateur se trouve dans la liste => true sinon false
+					  }).length === 0) ? false : true; // if user is in the list => true else false
 				belongsToList[list.name] = {
 					"list_id": list.id,
 					"user_id": user.id,
@@ -72,9 +72,9 @@ angular.module('twitterListApp')
 	}
 
 	/*
-	* Enchaine des calls pour récupérer les followings
+	* Chain the calls to perform to get the following list
 	* @param {Int} callToDo. 
-	* @return {Object} 
+	* @return {Object} followings.
 	*/
 
 	function getFollowings(callToDo) {
@@ -106,8 +106,8 @@ angular.module('twitterListApp')
 	}
 
 	/*
-	* Lance tous les calls de subsciption/unsubscription sur les différents users
-	* @param {Array} items. 
+	* Chain all the calls concerning the subsciption/unsubscription of the targetted users
+	* @param {Object} items.
 	*/
 
 	this.subscribeUsers = function(items) {
@@ -133,7 +133,9 @@ angular.module('twitterListApp')
 	};
 
 	/*
-	* Update de listOflist (TODO : improve this function)
+	* Update the listOflist object
+    * @param {Object} usersToUpdate. The list of users to update.
+    * (TODO : improve this function)
 	*/
 
 	this.updateListOfList = function(usersToUpdate) {
@@ -158,7 +160,8 @@ angular.module('twitterListApp')
 	};
 
 	/*
-	* Update Matrix (score + belongsToList)
+	* Update the matrix
+    * @param {Object} usersToUpdate. The list of users to update.
 	*/
 
 	this.updateMatrix = function(usersToUpdate) {
@@ -178,7 +181,7 @@ angular.module('twitterListApp')
 	};
 
 	/*
-	* Filtre l'objet matrix pour ne garder que les users qui nous intéresse
+	* Filter the matrix object to only keep certain users
 	* @param {String} toFilter.
 	*/
 
@@ -188,57 +191,56 @@ angular.module('twitterListApp')
 			InappService.matrix = _.reject(updatedMatrix, function(item) {
 				return item.score !== 0;
 			});
-			SearchService.initSearch(InappService.matrix);
-
+			PaginationService.groupToPages(InappService.matrix);
 		} else if(toFilter === "withMultipleLists") {
 			InappService.matrix = _.reject(updatedMatrix, function(item) {
 				return item.score === 0 || item.score === 1 ;
 			});
-			SearchService.initSearch(InappService.matrix);
+			PaginationService.groupToPages(InappService.matrix);
 		} else {
 			InappService.matrix = buildMatrix(InappService.users);
-			SearchService.initSearch(InappService.matrix);
+			PaginationService.groupToPages(InappService.matrix);
 		}
 	};
 
 	/*
-	* Recupère les datas à afficher dans le tableau
+	* Initialize the main table with the correct datas
 	*/
 
 	this.initializeTableWithDatas = function() {
-		// First step : on récupère toutes les listes créé par notre utilisateur
+		// First step: Get all the list created by the user
 		getTwitterInfos.get('/lists/ownerships').then(function(data) {
-			// Deuxième étape: on va récupérer toutes les personnes dans ces listes
+			// Second set: get all the users in these lists
 			getUsersInLists(data.lists).then(function(data) {
-				InappService.listOfLists = _.sortBy(data, function (obj) {return obj.name;}); // liste dans l'ordre alhabétique
-				// Troisième étape : on récupére les x dernières personnes suivies par notre utilisateur (max: 200)
+				InappService.listOfLists = _.sortBy(data, function (obj) {return obj.name;}); // sort the list in alphabetical order
+				// Third step: get the last following of the user (max: 200)
 				/* 
-					Stratégie :
-					L'API twitter limite la méthode GET friends/list à 15 calls toutes les 15mins.
-					Ainsi on distingue deux cas: 
-						- Si la personne a plus de 2800 followings (15 * 200) on chainera 15 calls et on fera la suite 15 min après
-						- Si la personne a moins de 2800 followings (majorité des personnes) on chainera le nombre de call correspondants (en priant pour quelle ne rafraichisse pas la page).
+					Strategy :
+					Due to Api rate limit on the GET friends/list request (15 calls every 15mins)
+					We distinguish two cases: 
+						- If the user has more than 2800 followings (15 * 200) we will chain the first 15calls and do the rest later.
+						- If the user has less than 2800 followings (the majority) we will chain all these calls.
 				*/
 				getTwitterInfos.get('/account/verify_credentials').then(function(data) {
 					var callToDo = Math.ceil((data.friends_count) / 200);
 					// If more than 2800 followings
 					if (callToDo > 15) {
 						getFollowings(15).then(function(userResult) {
-							// Quatrième étape: construit la score list, la matrix et les users
+							// Fourth step: build the scorelist, matrix and user objects
 							InappService.users = _.flatten(userResult);
 							InappService.matrix = buildMatrix(InappService.users);
-							// Cinquième étape: initialisation des composants tierces
-							SearchService.initSearch(InappService.matrix);
+							// Fifth step: initialized the pagination of the matrix
+							PaginationService.groupToPages(InappService.matrix);
 							$state.go('inapp.displayData');
 							/* TODO : indicate the user that we have to wait 15min now */
 						});
 					} else {
 						getFollowings(callToDo).then(function(userResult) {
-							// Quatrième étape: construit la score list, la matrix et les users
+							// Fourth step: build the scorelist, matrix and user objects
 							InappService.users = _.flatten(userResult);
 							InappService.matrix = buildMatrix(InappService.users);
-							// Cinquième étape: initialisation des composants tierces
-							SearchService.initSearch(InappService.matrix);
+							// Fifth step: initialized the pagination of the matrix
+							PaginationService.groupToPages(InappService.matrix);
 							$state.go('inapp.displayData');
 						});
 					}

@@ -1,12 +1,13 @@
 'use strict';
-// From : http://jsfiddle.net/SAWsA/11/ 
+// Credits & idea http://stackoverflow.com/questions/10816073/how-to-do-paging-in-angularjs/12670473#12670473
 angular.module('twitterListApp')
 .service('PaginationService', ['getTwitterInfos', 'InappService', '$filter', function(getTwitterInfos, InappService, $filter) {
+   
    var itemsPerPage = 100;
 
    /*
-   * Regroupe la liste d'item en sous groupes
-   * @param {Object} filteredItems. Les items à regrouper
+   * Split the matrix (or filtered matrix items) into pages
+   * @param {Object} filteredItems.
    */
 
    this.groupToPages = function (filteredItems) {

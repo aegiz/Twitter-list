@@ -6,13 +6,13 @@ angular.module('twitterListApp')
 	$scope.cellToUpdate = [];
 
 	/*
-	* Recupère le clic sur les input
-	* Va ensuite repertorier dans une array cellToUpdate les changements a executer.
-	* @param {object} infos toutes les infos à propos de ce champs input
-	* @param {number} infos.list_id l'id de la liste associé (en abscisses)
-	* @param {string} infos.user_id le nom de l'utilisateur associé (en ordonnées)
-	* @param {bool} infos.init_subscribed l'état de l'input à l'origine (true: clicked, false: not clicked)
-	* @param {bool} infos.subscribed l'etat de l'input actuellement
+	* Call on every clicks of the table's checkbox.
+	* Then, will update an  array cellToUpdate  with the changes to perform.
+	* @param {object} infos all the info about the cell
+	* @param {number} infos.list_id the id of the associated list (the x-axis)
+	* @param {string} infos.user_id the id of the associated user (the y-axis)
+	* @param {bool} infos.init_subscribed the state of the input on table initialization (true: checked, false: not checked)
+	* @param {bool} infos.subscribed the current state of the input
 	*/
 
 	$scope.handleInputClick = function(infos) {
@@ -31,9 +31,8 @@ angular.module('twitterListApp')
 	};
 
    	/*
-   	* Valide et souscrit les utilisateurs aux nouvelles listes.
-   	* Dans le callback on reinitialise la valeur initiale des input 
-   	* (... et pour cela on utilise les données du tableau newListToSubscribeTo)
+   	* Launch subscription / unsubscription calls. 
+    * Then, clean the cellToUpdate array + update matrix and ListOfList, display ok message
    	*/
 
    	$scope.handleValidation = function() {
