@@ -71,7 +71,7 @@ gulp.task('sass', function() {
 });
 
 
-gulp.task('js-sandbox', function () {
+gulp.task('javascript', function () {
   return gulp.src($$.mainBowerFiles().concat(config.js.src + '/**/*.js'))
     .pipe($$.concat('all.js'))
     .pipe(gulp.dest(config.js.dest))
@@ -81,15 +81,15 @@ gulp.task('js-sandbox', function () {
 
 gulp.task('watch', function () {
   gulp.watch(config.sass.src + '/**/*.scss', ['sass']);
-  gulp.watch(config.js.src + '/**/*.js', ['js-sandbox']);
+  gulp.watch(config.js.src + '/**/*.js', ['javascript']);
   gulp.watch(config.html.src + 'index.html', ['index']);
   gulp.watch(config.html.src + '/views/**/*.html', ['templates']);
 });
 
 
-gulp.task('build', ['index', 'templates', 'sass', 'js-sandbox']);
+gulp.task('build', ['index', 'templates', 'sass', 'javascript']);
 
 gulp.task('default', ['build'], function() {
   gulp.start('connect', 'watch');
 });
-//gulp.task('build', ['html', 'sass', 'js-sandbox', 'image', 'font']);
+//gulp.task('build', ['html', 'sass', 'javascript', 'image', 'font']);

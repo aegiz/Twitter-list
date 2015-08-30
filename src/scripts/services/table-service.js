@@ -21,7 +21,10 @@ angular.module('twitterListApp')
 			}
 			getTwitterInfos.get('/lists/members?list_id=' + list.id + '&skip_status=1&count=5000')
 			.then(function (data) {
-				finalList.push({name: list.slug, id:list.id, users: data.users});
+				var cleanUsers = _.map(data.users, function(user) {
+					return _.pick(user, "name", "id");
+				});
+				finalList.push({name: list.slug, id:list.id, users:cleanUsers});
 				loadLists(++index); // recursif
 			})
 			.catch(function (err) {
@@ -43,7 +46,7 @@ angular.module('twitterListApp')
 		_.each(users, function(user) {          
 			var belongsToList = {},
 				userInfos = {};
-			userInfos.name = user.screen_name;
+			userInfos.name = user.name;
 			userInfos.id = user.id;
 			userInfos.score = 0;
 			_.each(InappService.listOfLists, function(list) {
@@ -70,8 +73,8 @@ angular.module('twitterListApp')
 
 	/*
 	* Enchaine des calls pour récupérer les followings
-	* @param {Object} users. Une arrays contenant tous utilisateur
-	* @return {Object} score {id,score,screen_name} des infos sur le user et son score
+	* @param {Int} callToDo. 
+	* @return {Object} 
 	*/
 
 	function getFollowings(callToDo) {
@@ -85,7 +88,10 @@ angular.module('twitterListApp')
 			}
 			getTwitterInfos.get('/friends/list?count=200&cursor='+nextCursor)
 			.then(function (data) {
-				followings.push(data.users);
+				var cleanUsers = _.map(data.users, function(user) {
+					return _.pick(user, "name", "id");
+				});
+				followings.push(cleanUsers);
 				callToDo --;
 				getFollowing(data.next_cursor);
 			})
