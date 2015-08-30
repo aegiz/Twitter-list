@@ -1,10 +1,12 @@
 {
   "name": "Sleekapp",
   "version": "0.0.1",
-  "homepage": "https://github.com/tigerlily/sleekapp",
-  "description": "Sleek Website",
+  "homepage": "https://github.com/aegiz/Twitter-list",
+  "description": "An app to easily sort your twitter following in lists",
   "keywords": [
-    "sleek"
+    "twitter",
+    "list",
+    "sort"
   ],
   "authors": [
     "Adrien Rahier"
@@ -14,9 +16,7 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "bower_components"
   ],
   "dependencies": {
     "angular": "~1.4.1",

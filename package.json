@@ -1,8 +1,8 @@
 {
   "name": "TwitterList",
   "version": "0.0.1",
-  "description": "Side Project about Twitter lists",
-  "main": "index.js",
+  "description": "An app to easily sort your twitter following in lists",
+  "main": "all.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,7 +12,8 @@
   },
   "keywords": [
     "Twitter",
-    "lists"
+    "lists",
+    "sort"
   ],
   "author": "Adrien Rahier",
   "license": "MIT",
