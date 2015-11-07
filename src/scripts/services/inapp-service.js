@@ -1,4 +1,5 @@
 'use strict';
+// See the inapp controller for more details about this variables
 angular.module('twitterListApp')
 	.factory('InappService', ['$q', function($q) {
 		var listOfLists = [],

@@ -73,7 +73,7 @@ angular.module('twitterListApp')
 
 	/*
 	* currentPage: 
-	* thi int is dedicated to page's navigation (technically it's the index of pagedItems)
+	* this int is dedicated to page's navigation (technically it's the index of pagedItems)
 	* So when it's value change the able view is updated
 	*/
 

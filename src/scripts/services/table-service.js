@@ -231,6 +231,7 @@ angular.module('twitterListApp')
 							InappService.users = _.flatten(userResult);
 							InappService.matrix = buildMatrix(InappService.users);
 							// Fifth step: initialized the pagination of the matrix
+							PaginationService.initializeUserNb(InappService.users.length);
 							PaginationService.groupToPages(InappService.matrix);
 							$state.go('inapp.displayData');
 							/* TODO : indicate the user that we have to wait 15min now */
@@ -241,6 +242,7 @@ angular.module('twitterListApp')
 							InappService.users = _.flatten(userResult);
 							InappService.matrix = buildMatrix(InappService.users);
 							// Fifth step: initialized the pagination of the matrix
+							PaginationService.initializeUserNb(InappService.users.length);
 							PaginationService.groupToPages(InappService.matrix);
 							$state.go('inapp.displayData');
 						});
