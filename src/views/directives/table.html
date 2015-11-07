@@ -7,7 +7,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in pagedItems[currentPage]">
+            <tr ng-repeat="item in pagedItems[currentPage]" viewport-watch>
                 <td>@{{item.screen_name}}</td>
                 <td ng-repeat="list in item.belongsToList">
                    <input type="checkbox" class="checkbox" value="" name="check" ng-model="list.subscribed" ng-change="handleInputClick(list)">
