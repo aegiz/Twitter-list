@@ -1,14 +1,14 @@
 <div>
-    <table class="table table-striped table-condensed table-hover">
+    <table class="table table-striped table-condensed table-hover" fixed-header>
         <thead>
             <tr>
-                <th></th>
+                <th class="userid">User ID</th>
                 <th ng-repeat="list in listOfLists">{{list.name}}</th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in pagedItems[currentPage]">
-                <td>{{item.name}}</td>
+            <tr ng-repeat="item in pagedItems[currentPage]" viewport-watch>
+                <td>@{{item.screen_name}}</td>
                 <td ng-repeat="list in item.belongsToList">
                    <input type="checkbox" class="checkbox" value="" name="check" ng-model="list.subscribed" ng-change="handleInputClick(list)">
                 </td>

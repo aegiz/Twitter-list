@@ -1,4 +1,4 @@
-var twitterListApp = angular.module("twitterListApp", ['ngRoute', 'templates', 'states'])
+var twitterListApp = angular.module("twitterListApp", ['ngRoute', 'templates', 'states', 'angularViewportWatch'])
 
 .config(function(HullServiceProvider) {
 	HullServiceProvider.setHost("https://6e082fcc.hullapp.io");

@@ -3,12 +3,42 @@
 
 .main-container {
 	margin: 0 auto;
-	width: 1000px;
+	width: 90%;
 	margin-top: 50px;
 }
-
 
 .confirmation-button {
 	color: red;
 	display: inline-block;
+}
+
+table {
+    border-collapse: collapse;
+    margin-bottom: 3em;
+    width: 100%;
+    background: #fff;
+}
+
+td, th {
+    padding: 0.75em 1.5em;
+}
+
+th {
+    background-color: #31bc86;
+    font-weight: bold;
+    color: #fff;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.userid {
+	text-align: left;
+}
+
+tbody th {
+	background-color: #2ea879;
+}
+
+tbody input {
+	margin: 0 auto !important;
 }

@@ -43,11 +43,12 @@ angular.module('twitterListApp')
 
 	function buildMatrix(users) {
 		var matrix = [];
-		_.each(users, function(user) {          
+		_.each(users, function(user) {
 			var belongsToList = {},
 				userInfos = {};
 			userInfos.name = user.name;
 			userInfos.id = user.id;
+			userInfos.screen_name = user.screen_name;
 			userInfos.score = 0;
 			_.each(InappService.listOfLists, function(list) {
 				var followList = (_.filter(list.users, function(usr) {
@@ -89,7 +90,7 @@ angular.module('twitterListApp')
 			getTwitterInfos.get('/friends/list?count=200&cursor='+nextCursor)
 			.then(function (data) {
 				var cleanUsers = _.map(data.users, function(user) {
-					return _.pick(user, "name", "id");
+					return _.pick(user, "name", "id", "screen_name");
 				});
 				followings.push(cleanUsers);
 				callToDo --;
@@ -230,6 +231,7 @@ angular.module('twitterListApp')
 							InappService.users = _.flatten(userResult);
 							InappService.matrix = buildMatrix(InappService.users);
 							// Fifth step: initialized the pagination of the matrix
+							PaginationService.initializeUserNb(InappService.users.length);
 							PaginationService.groupToPages(InappService.matrix);
 							$state.go('inapp.displayData');
 							/* TODO : indicate the user that we have to wait 15min now */
@@ -240,6 +242,7 @@ angular.module('twitterListApp')
 							InappService.users = _.flatten(userResult);
 							InappService.matrix = buildMatrix(InappService.users);
 							// Fifth step: initialized the pagination of the matrix
+							PaginationService.initializeUserNb(InappService.users.length);
 							PaginationService.groupToPages(InappService.matrix);
 							$state.go('inapp.displayData');
 						});
