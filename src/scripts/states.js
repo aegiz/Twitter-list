@@ -62,5 +62,18 @@ angular.module('states', ['ui.router'])
 				controller: 'FiltersCtrl'
 			}
 		}
+	})
+	.state('inapp.displayDataEmptyList', {
+		url : '/empylist',
+		views: { 
+			"table": {
+				templateUrl: 'directives/tableEmptyList.html', 
+				controller: 'TableCtrl'
+			},
+			"pagination": {
+				templateUrl: 'directives/pagination.html', 
+				controller: 'PaginationCtrl'
+			}
+		}
 	});
 });

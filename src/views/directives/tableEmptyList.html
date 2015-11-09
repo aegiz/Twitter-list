@@ -6,7 +6,7 @@
                 <th class="listname" ng-repeat="list in listOfLists">{{list.name}}</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="emptyTable">
             <tr ng-repeat="item in pagedItems[currentPage]" viewport-watch>
                 <td>@{{item.screen_name}}</td>
                 <td ng-repeat="list in item.belongsToList">
@@ -15,9 +15,12 @@
             </tr>   
         </tbody>
     </table>
-    <button class="submitChanges" ng-click="handleValidation()">Valider</button>
-    <div ng-show="showConfirmationMsg" ng-init="showConfirmationMsg=false" class="confirmation-button">
-        Changes done!
+    <div class="warningMessage">
+        <div class="warningMessage__inner">
+            <b>Uhoh</b> it seems like you don't have any list yet.
+            Go to <a href="https://twitter.com/{{currentUser.identities[0].login}}/lists">this adress</a> and click "create a list" button first.<br>
+            Then, come back and we will see what we can do for you ;-).
+        </div>
     </div>
 </div>
 

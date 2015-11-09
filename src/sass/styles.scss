@@ -1,6 +1,17 @@
 @import "bootstrap.min";
 @import "bootstrap.no-icons.min";
 
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
 .main-container {
 	margin: 0 auto;
 	width: 90%;
@@ -20,7 +31,7 @@ table {
 }
 
 td, th {
-    padding: 0.75em 1.5em;
+    padding: 0.75em 1.5em;   
 }
 
 th {
@@ -28,17 +39,43 @@ th {
     font-weight: bold;
     color: #fff;
     white-space: nowrap;
-    text-align: center;
+    text-align: center !important;
 }
 
 .userid {
-	text-align: left;
+	text-align: left !important;
 }
 
 tbody th {
+    text-align: center;
 	background-color: #2ea879;
 }
 
 tbody input {
 	margin: 0 auto !important;
+}
+
+.table-container {
+    position: relative;
+}
+
+.warningMessage {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.warningMessage__inner {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+}
+
+.pagination {
+    margin: 0;
 }
