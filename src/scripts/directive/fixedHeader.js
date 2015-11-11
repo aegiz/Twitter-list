@@ -31,22 +31,10 @@ angular.module('twitterListApp')
 					var tbody = elem.querySelector('tbody');
 					var scrollBarWidth = tbody.offsetWidth - tbody.clientWidth;
 
-					angular.element(elem.querySelectorAll('th')).css('width', tbody.offsetWidth);
-					angular.element(elem.querySelectorAll('tr')).css('width', tbody.offsetWidth);
-
-					// set widths of columns
-					angular.forEach(elem.querySelectorAll('tr:first-child th'), function (thElem, i) {
-						var tdElems = elem.querySelector('tbody tr:first-child td:nth-child(' + (i + 1) + ')');
-						var columnWidth = tdElems ? tdElems.offsetWidth : thElem.offsetWidth;
-						if (tdElems) {
-							tdElems.style.width = columnWidth + 'px';
-						}
-						if (thElem) {
-							thElem.style.width = columnWidth + 'px';
-						}
-					});
-
 					// set css styles on thead and tbody
+
+					angular.element(elem.querySelectorAll('thead')).css('width', tbody.offsetWidth);
+					angular.element(elem.querySelectorAll('tbody')).css('width', tbody.offsetWidth);
 					angular.element(elem.querySelectorAll('thead')).css('display', 'block');
 					angular.element(elem.querySelectorAll('tbody')).css({
 							'display': 'block',
@@ -54,14 +42,28 @@ angular.module('twitterListApp')
 							'overflow': 'auto'
 					});
 
+					var columnNb = elem.querySelectorAll('tr:first-child th').length - 1;
+					var columnWidth = (elem.querySelector('tbody').offsetWidth - 220) / columnNb;
+
+					// set widths of columns
+					angular.forEach(elem.querySelectorAll('tr:first-child th'), function (thElem, i) {
+						var tdElems = elem.querySelector('tbody tr:first-child td:nth-child(' + (i + 1) + ')');
+						if (tdElems) {
+							tdElems.style.width = (i==0 ? '220px' : columnWidth + 'px');
+						}
+						if (thElem) {
+							thElem.style.width = (i==0 ? '220px' : columnWidth + 'px');
+						}
+					});
+
 					// reduce width of last column by width of scrollbar
 					
-					if (scrollBarWidth > 0) {
+					/*if (scrollBarWidth > 0) {
 						// for some reason trimming the width by 2px lines everything up better
 						scrollBarWidth -= 2;
 						var lastColumn = elem.querySelector('tbody tr:first-child td:last-child');
 						lastColumn.style.width = (lastColumn.offsetWidth - scrollBarWidth) + 'px';
-					}
+					}*/
 				});
 			}
 		}

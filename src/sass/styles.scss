@@ -1,3 +1,13 @@
+/* Variables */
+
+$dark-blue : #6ad1df;
+$middle-blue : #e1f6f9;
+$light-blue : #f2fdff;
+
+$dark-grey : #91a0ad;
+$middle-grey : #f0f5f6;
+$light-grey : #f9fcfd;
+
 * {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -58,6 +68,7 @@ body {
 
 .table-container {
 	position: relative;
+
 }
 
 /* General table styles */
@@ -82,12 +93,13 @@ body {
 }
 
 .table__cell--th {
+	overflow: hidden;
 	font-weight: bold;
-	font-size: 1.1rem;
 	color: #fff;
 	white-space: nowrap;
 	text-align: center;
-	color: #9aa7b3;
+	font-size: 1.1rem;
+	color: $dark-grey;
 }
 
 .table__cell--name {
@@ -106,6 +118,12 @@ body {
 		&:first-child {
 			border-top:none;
 		}
+		&:nth-child(odd) {
+			background-color: $light-grey;
+		}
+		&:hover {
+			background-color: $light-blue;
+		}
 	}
 }
 
@@ -113,12 +131,6 @@ body {
 	border-left: 1px solid #e2e7e7;
 	&:last-child {
 		border-right: 1px solid #e2e7e7;
-	}
-}
-
-.table__cell--checkbox {
-	input {
-		margin: 0 auto;
 	}
 }
 
@@ -132,9 +144,11 @@ body {
 .user-picture {
 	display: inline-block;
 	vertical-align: middle;
-	width: 48px;
 	img {
-		border-radius: 50px;
+		display: block;
+		border-radius: 48px;
+		width: 48px;
+		height: 48px;
 	}
 }
 
@@ -143,8 +157,16 @@ body {
 	display: inline-block;
 	vertical-align: middle;
 	font-size: 0;
-	p {
-		font-size: 15px;
+	width: calc(100% - 56px);
+	div {
+		color:  $dark-grey;
+		font-size: 1.25rem;
+	}
+}
+
+.table__cell--checkbox {
+	input {
+		margin: 0 auto;
 	}
 }
 
