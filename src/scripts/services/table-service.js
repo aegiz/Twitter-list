@@ -49,6 +49,7 @@ angular.module('twitterListApp')
 			userInfos.name = user.name;
 			userInfos.id = user.id;
 			userInfos.screen_name = user.screen_name;
+			userInfos.profile_image_url = user.profile_image_url;
 			userInfos.score = 0;
 			_.each(InappService.listOfLists, function(list) {
 				var followList = (_.filter(list.users, function(usr) {
@@ -90,7 +91,7 @@ angular.module('twitterListApp')
 			getTwitterInfos.get('/friends/list?count=200&cursor='+nextCursor)
 			.then(function (data) {
 				var cleanUsers = _.map(data.users, function(user) {
-					return _.pick(user, "name", "id", "screen_name");
+					return _.pick(user, "name", "id", "screen_name", "profile_image_url");
 				});
 				followings.push(cleanUsers);
 				callToDo --;
