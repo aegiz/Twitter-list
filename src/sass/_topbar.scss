@@ -17,7 +17,7 @@
 .category {
 	display: table-cell;
 	vertical-align: middle;
-	padding: 33px 20px;
+	padding: 31px 20px;
 	width: 33%;
 	background-color: $middle-grey;
 	color: $dark-grey;
@@ -25,6 +25,7 @@
 	text-align: center;
 	transition: all 0.2s;
 	border-right: 1px solid $border-grey;
+	border-bottom: 1px solid $border-grey;
 	font-size: 1.4rem;
 	&:hover {
 		background-color: #FFF;
@@ -34,11 +35,12 @@
 
 .category--active {
 	background-color: #FFF;
+	border-bottom: 0;
 	&:hover {
 		cursor: default;
 	}
 	.category__title {
-		font-weight: bold;
+		font-family: "Open Sans bold";
 	}
 }
 
@@ -52,5 +54,6 @@
 	width: 30%;
 	text-align: right;
 	background-color: $middle-grey;
+	border-bottom: 1px solid $border-grey;
 	padding-right: 15px;
 }
