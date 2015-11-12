@@ -1,2 +1,11 @@
-<label><input type="checkbox" name="checkbox" value="value" ng-model="checkWithoutList" ng-click="filterWithoutList(checkWithoutList)" ng-disabled="checkWithMultipleLists"> Select only users without lists</label>
-<label><input type="checkbox" name="checkbox" value="value" ng-model="checkWithMultipleLists" ng-click="filterWithMultipleLists(checkWithMultipleLists)" ng-disabled="checkWithoutList"> Select only users with Multiple lists</label>
+<div class="category-container">
+	<div class="category category--all" ng-click="filterList('noFilter')" ng-class="{'category--active':selectedTab === 'noFilter'}">
+		<span class="category__title">All followings</span> ({{Hello}})
+	</div>
+	<div class="category category--wo-list" ng-click="filterList('withoutList')" ng-class="{'category--active':selectedTab === 'withoutList'}">
+		<span class="category__title">Without list</span> ({{Hello}})
+	</div>
+	<div class="category category--wm-list" ng-click="filterList('withMultiList')" ng-class="{'category--active':selectedTab === 'withMultiList'}">
+		<span class="category__title">With multiple list</span> ({{Hello}})
+	</div>
+</div>

@@ -1,0 +1,56 @@
+.topbar {
+	display: table;
+	width: 100%;
+}
+
+.filters {
+	display: table-cell;
+	vertical-align: middle;
+	width: 70%;
+}
+
+.category-container {
+	display: table;
+	width: 100%;
+}
+
+.category {
+	display: table-cell;
+	vertical-align: middle;
+	padding: 33px 20px;
+	width: 33%;
+	background-color: $middle-grey;
+	color: $dark-grey;
+	opacity: 0.9;
+	text-align: center;
+	transition: all 0.2s;
+	border-right: 1px solid $border-grey;
+	font-size: 1.4rem;
+	&:hover {
+		background-color: #FFF;
+		cursor: pointer;
+	}
+}
+
+.category--active {
+	background-color: #FFF;
+	&:hover {
+		cursor: default;
+	}
+	.category__title {
+		font-weight: bold;
+	}
+}
+
+.category__title {
+	color: $dark-blue;
+}
+
+.searchBar {
+	display: table-cell;
+	vertical-align: middle;
+	width: 30%;
+	text-align: right;
+	background-color: $middle-grey;
+	padding-right: 15px;
+}

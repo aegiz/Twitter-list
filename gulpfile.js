@@ -64,12 +64,11 @@ gulp.task('templates', function () {
 
 
 gulp.task('sass', function() {
-  return gulp.src(config.sass.src + '/**/*.scss')
+  return gulp.src(config.sass.src + '/*.scss')
   .pipe($$.sass())
   .on('error', $$.notify.onError("Error: <%= error.message %>"))
   .on('error', handleError)
-  .pipe($$.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-  .pipe($$.minifyCSS())
+  .pipe($$.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))    .pipe($$.minifyCSS())
   .pipe(gulp.dest(config.sass.dest))
   .pipe($$.connect.reload());
 });
@@ -90,7 +89,7 @@ gulp.task('javascript', function () {
 
 
 gulp.task('watch', function () {
-  gulp.watch(config.sass.src + '/**/*.scss', ['sass']);
+  gulp.watch(config.sass.src + '/*.scss', ['sass']);
   gulp.watch(config.js.src + '/**/*.js', ['javascript']);
   gulp.watch(config.html.src + 'index.html', ['index']);
   gulp.watch(config.html.src + '/views/**/*.html', ['templates']);

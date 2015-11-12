@@ -188,20 +188,23 @@ angular.module('twitterListApp')
 	*/
 
 	this.filterTable = function(toFilter) {
-		var updatedMatrix = InappService.matrix;
-		if(toFilter === "withoutList") {
-			InappService.matrix = _.reject(updatedMatrix, function(item) {
-				return item.score !== 0;
-			});
-			PaginationService.groupToPages(InappService.matrix);
-		} else if(toFilter === "withMultipleLists") {
-			InappService.matrix = _.reject(updatedMatrix, function(item) {
-				return item.score === 0 || item.score === 1 ;
-			});
-			PaginationService.groupToPages(InappService.matrix);
-		} else {
-			InappService.matrix = buildMatrix(InappService.users);
-			PaginationService.groupToPages(InappService.matrix);
+		InappService.matrix = buildMatrix(InappService.users);
+		switch (toFilter) {
+			case "noFilter":
+				PaginationService.groupToPages(InappService.matrix);
+				break;
+			case "withoutList":
+				InappService.matrix = _.reject(InappService.matrix, function(item) {
+					return item.score !== 0;
+				});
+				PaginationService.groupToPages(InappService.matrix);
+				break;
+			case "withMultiList":
+				InappService.matrix = _.reject(InappService.matrix, function(item) {
+					return item.score === 0 || item.score === 1 ;
+				});
+				PaginationService.groupToPages(InappService.matrix);
+				break;
 		}
 	};
 

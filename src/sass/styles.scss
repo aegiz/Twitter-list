@@ -1,18 +1,12 @@
-/* Variables */
-
-$dark-blue : #6ad1df;
-$middle-blue : #e1f6f9;
-$light-blue : #f2fdff;
-
-$dark-grey : #91a0ad;
-$middle-grey : #f0f5f6;
-$light-grey : #f9fcfd;
+@import "variables";
+@import "fonts";
 
 * {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+
 ::-webkit-scrollbar {
 	-webkit-appearance: none;
 	width: 7px;
@@ -44,132 +38,9 @@ body {
 	margin-top: 50px;
 }
 
-.confirmation-button {
-	color: red;
-	display: inline-block;
-}
-
-.warningMessage {
-	position: absolute;
-	top: 0;
-	height: 100%;
-	width: 100%;
-	background-color: rgba(255, 255, 255, 0.6);
-}
-
-.warningMessage__inner {
-	top: 50%;
-	left: 50%;
-	position: absolute;
-	transform: translateX(-50%);
-	text-align: center;
-	width: 100%;
-}
-
-.table-container {
-	position: relative;
-
-}
-
-/* General table styles */
-
-.table {
-	border-collapse: collapse;
-	margin-bottom: 3em;
-	width: 100%;
-	background: #fff;
-}
-
-.table__cell {
-	text-align: center;
-}
-
-/* header */
-
-.table__head {
-	border-bottom: 1px solid #e2e7e7;
-	border-left: 1px solid #e2e7e7;
-	border-right: 1px solid #e2e7e7;
-}
-
-.table__cell--th {
-	overflow: hidden;
-	font-weight: bold;
-	color: #fff;
-	white-space: nowrap;
-	text-align: center;
-	font-size: 1.1rem;
-	color: $dark-grey;
-}
-
-.table__cell--name {
-	text-align: left;
-	padding: 12px 32px;
-	margin: 0;
-	display: inline-block;
-}
-
-/* body */
-
-.table__body {
-	.table__row {
-		border-top: 1px solid #e2e7e7;
-		border-bottom: 1px solid #e2e7e7;
-		&:first-child {
-			border-top:none;
-		}
-		&:nth-child(odd) {
-			background-color: $light-grey;
-		}
-		&:hover {
-			background-color: $light-blue;
-		}
-	}
-}
-
-.table__cell--td {
-	border-left: 1px solid #e2e7e7;
-	&:last-child {
-		border-right: 1px solid #e2e7e7;
-	}
-}
-
-.table__cell--user-infos {
-	padding: 12px 32px;
-	text-align: left;
-	margin: 0;
-	display: inline-block;
-}
-
-.user-picture {
-	display: inline-block;
-	vertical-align: middle;
-	img {
-		display: block;
-		border-radius: 48px;
-		width: 48px;
-		height: 48px;
-	}
-}
-
-.user-infos {
-	padding: 0 0 0 8px;
-	display: inline-block;
-	vertical-align: middle;
-	font-size: 0;
-	width: calc(100% - 56px);
-	div {
-		color:  $dark-grey;
-		font-size: 1.25rem;
-	}
-}
-
-.table__cell--checkbox {
-	input {
-		margin: 0 auto;
-	}
-}
-
 .pagination {
 	margin: 0;
 }
+
+@import "table";
+@import "topbar";
