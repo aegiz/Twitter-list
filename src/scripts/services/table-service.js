@@ -228,7 +228,7 @@ angular.module('twitterListApp')
 				// Second step: get all the users in these lists
 				getUsersInLists(data.lists).then(function(data) {
 					InappService.listOfLists = _.sortBy(data, function (obj) {return obj.name;}); // sort the list in alphabetical order
-					// Third step: get the last following of the user (max: 200)
+					// Third step: get the last followings of the user (max: 200)
 					/* 
 						Strategy :
 						Due to Api rate limit on the GET friends/list request (15 calls every 15mins)

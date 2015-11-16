@@ -87,14 +87,12 @@ gulp.task('javascript', function () {
     .pipe($$.connect.reload());
 })
 
-
 gulp.task('watch', function () {
   gulp.watch(config.sass.src + '/*.scss', ['sass']);
   gulp.watch(config.js.src + '/**/*.js', ['javascript']);
   gulp.watch(config.html.src + 'index.html', ['index']);
   gulp.watch(config.html.src + '/views/**/*.html', ['templates']);
 });
-
 
 gulp.task('build', ['index', 'templates', 'sass', 'javascript', 'font']);
 

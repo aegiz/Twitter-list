@@ -17,7 +17,18 @@ Run the following command :
 ```
 $ npm install
 $ bower install
-gulp // to launch the server which will be run by default on 8042 port
+$ gulp // launch gulp (will be run by default on 8042 port)
 ```
 
-See the comments in src/scripts/app.js file for more informations about the next todos and features
+## Mock
+
+If you want to perform some tests without calling the Twitter API you can use json-server on the db.json mock file.
+
+```
+$ json-server --watch db.json // launch a mock server for test (will run by default on 3000 port)
+```
+... And in that case do not forget to turn isMock const to true in app.js ;-)
+
+## Incoming features
+
+See the github's wiki concerning the next todos and features.
