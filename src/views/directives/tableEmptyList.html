@@ -1,0 +1,26 @@
+<div class="table-container">
+    <table class="table table-striped table-condensed table-hover" fixed-header>
+        <thead>
+            <tr>
+                <th class="userid">User ID</th>
+                <th class="listname" ng-repeat="list in listOfLists">{{list.name}}</th>
+            </tr>
+        </thead>
+        <tbody class="emptyTable">
+            <tr ng-repeat="item in pagedItems[currentPage]" viewport-watch>
+                <td>@{{item.screen_name}}</td>
+                <td ng-repeat="list in item.belongsToList">
+                   <input type="checkbox" class="checkbox" value="" name="check" ng-model="list.subscribed" ng-change="handleInputClick(list)">
+                </td>
+            </tr>   
+        </tbody>
+    </table>
+    <div class="warningMessage">
+        <div class="warningMessage__inner">
+            <b>Uhoh</b> it seems like you don't have any list yet.
+            Go to <a href="https://twitter.com/{{currentUser.identities[0].login}}/lists">this adress</a> and click "create a list" button first.<br>
+            Then, come back and we will see what we can do for you ;-).
+        </div>
+    </div>
+</div>
+

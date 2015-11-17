@@ -1,5 +1,36 @@
-@import "bootstrap.min";
-@import "bootstrap.no-icons.min";
+@import "variables";
+@import "fonts";
+
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+	-webkit-appearance: none;
+	width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+	border-radius: 4px;
+	background-color: rgba(0,0,0,.5);
+	-webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+html, body {
+	height: 100%;
+	background-color: #e9edf5;
+	font-family: 'Open Sans';
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+}
 
 .main-container {
 	margin: 0 auto;
@@ -7,38 +38,9 @@
 	margin-top: 50px;
 }
 
-.confirmation-button {
-	color: red;
-	display: inline-block;
+.pagination {
+	margin: 0;
 }
 
-table {
-    border-collapse: collapse;
-    margin-bottom: 3em;
-    width: 100%;
-    background: #fff;
-}
-
-td, th {
-    padding: 0.75em 1.5em;
-}
-
-th {
-    background-color: #31bc86;
-    font-weight: bold;
-    color: #fff;
-    white-space: nowrap;
-    text-align: center;
-}
-
-.userid {
-	text-align: left;
-}
-
-tbody th {
-	background-color: #2ea879;
-}
-
-tbody input {
-	margin: 0 auto !important;
-}
+@import "table";
+@import "topbar";

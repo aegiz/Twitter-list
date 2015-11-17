@@ -17,19 +17,32 @@ angular.module('states', ['ui.router'])
 		templateUrl: 'inapp.html',
 		controller: 'InappCtrl',
 		resolve: {
-			loginUser: function ($state, $location, $rootScope, AuthService, TableService) {
-				if($state.current.name !== "root") { // Prevent user to start if he was not on login page
+			loginUser: function (isMock, mockService, $state, $location, $rootScope, AuthService, TableService) {
+				// Prevent user to start if he was not on login page
+				if($state.current.name !== "root") {
 					$location.path('/');
 				} else {
-					AuthService.login().then(function (user) {
-						if (user) {
-							$rootScope.currentUser = user;
-							// Launch table initialization
-							TableService.initializeTableWithDatas();
-						} else {
-							$location.path('/');
-						}
-					});
+					if(!isMock) {
+						AuthService.login().then(function (user) {
+							if (user) {
+								$rootScope.currentUser = user;
+								// Launch table initialization
+								TableService.initializeTableWithDatas();
+							} else {
+								$location.path('/');
+							}
+						});
+					} else {
+						mockService.get("/user").then(function (user){
+							if (user) {
+								$rootScope.currentUser = user;
+								// Launch table initialization
+								TableService.initializeTableWithDatas();
+							} else {
+								$location.path('/');
+							}
+						});
+					}
 				}
 			}
 		}
@@ -60,6 +73,19 @@ angular.module('states', ['ui.router'])
 			"filters": {
 				templateUrl: 'directives/filters.html', 
 				controller: 'FiltersCtrl'
+			}
+		}
+	})
+	.state('inapp.displayDataEmptyList', {
+		url : '/empylist',
+		views: { 
+			"table": {
+				templateUrl: 'directives/tableEmptyList.html', 
+				controller: 'TableCtrl'
+			},
+			"pagination": {
+				templateUrl: 'directives/pagination.html', 
+				controller: 'PaginationCtrl'
 			}
 		}
 	});

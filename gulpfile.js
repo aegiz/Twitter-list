@@ -25,6 +25,10 @@ var config = {
   js: {
     src: srcDir + '/scripts',
     dest: destDir + '/assets/scripts'
+  },
+  font: {
+    src: srcDir + '/fonts',
+    dest: destDir + '/assets/fonts'
   }
 };
 
@@ -60,13 +64,18 @@ gulp.task('templates', function () {
 
 
 gulp.task('sass', function() {
-  return gulp.src(config.sass.src + '/**/*.scss')
+  return gulp.src(config.sass.src + '/*.scss')
   .pipe($$.sass())
-  // .on('error', $$.notify.onError("Error: <%= error.message %>"))
-  // .on('error', handleError)
-  // .pipe($$.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
-  // .pipe($$.minifyCSS())
+  .on('error', $$.notify.onError("Error: <%= error.message %>"))
+  .on('error', handleError)
+  .pipe($$.autoprefixer('last 2 version', 'safari 5', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))    .pipe($$.minifyCSS())
   .pipe(gulp.dest(config.sass.dest))
+  .pipe($$.connect.reload());
+});
+
+gulp.task('font', function () {
+  return gulp.src(config.font.src + '/**/*')
+  .pipe(gulp.dest(config.font.dest))
   .pipe($$.connect.reload());
 });
 
@@ -78,18 +87,15 @@ gulp.task('javascript', function () {
     .pipe($$.connect.reload());
 })
 
-
 gulp.task('watch', function () {
-  gulp.watch(config.sass.src + '/**/*.scss', ['sass']);
+  gulp.watch(config.sass.src + '/*.scss', ['sass']);
   gulp.watch(config.js.src + '/**/*.js', ['javascript']);
   gulp.watch(config.html.src + 'index.html', ['index']);
   gulp.watch(config.html.src + '/views/**/*.html', ['templates']);
 });
 
-
-gulp.task('build', ['index', 'templates', 'sass', 'javascript']);
+gulp.task('build', ['index', 'templates', 'sass', 'javascript', 'font']);
 
 gulp.task('default', ['build'], function() {
   gulp.start('connect', 'watch');
 });
-//gulp.task('build', ['html', 'sass', 'javascript', 'image', 'font']);

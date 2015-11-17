@@ -1,0 +1,35 @@
+// PATH
+$path-fonts : '/assets/fonts/';
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url($path-fonts + 'opensans-regular-webfont.eot');
+  src: url($path-fonts + 'opensans-regular-webfont.woff2') format('woff2'),
+       url($path-fonts + 'opensans-regular-webfont.woff') format('woff'),
+       url($path-fonts + 'opensans-regular-webfont.ttf') format('truetype'),
+       url($path-fonts + 'opensans-regular-webfont') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Open Sans bold';
+  src: url($path-fonts + 'opensans-bold-webfont.eot');
+  src: url($path-fonts + 'opensans-bold-webfont.woff2') format('woff2'),
+       url($path-fonts + 'opensans-bold-webfont.woff') format('woff'),
+       url($path-fonts + 'opensans-bold-webfont.ttf') format('truetype'),
+       url($path-fonts + 'opensans-bold-webfont') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Open Sans semibold';
+  src: url($path-fonts + 'opensans-semibold-webfont.eot');
+  src: url($path-fonts + 'opensans-semibold-webfont.woff2') format('woff2'),
+       url($path-fonts + 'opensans-semibold-webfont.woff') format('woff'),
+       url($path-fonts + 'opensans-semibold-webfont.ttf') format('truetype'),
+       url($path-fonts + 'opensans-semibold-webfont') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}

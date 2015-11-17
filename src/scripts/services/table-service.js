@@ -49,6 +49,7 @@ angular.module('twitterListApp')
 			userInfos.name = user.name;
 			userInfos.id = user.id;
 			userInfos.screen_name = user.screen_name;
+			userInfos.profile_image_url = user.profile_image_url;
 			userInfos.score = 0;
 			_.each(InappService.listOfLists, function(list) {
 				var followList = (_.filter(list.users, function(usr) {
@@ -90,7 +91,7 @@ angular.module('twitterListApp')
 			getTwitterInfos.get('/friends/list?count=200&cursor='+nextCursor)
 			.then(function (data) {
 				var cleanUsers = _.map(data.users, function(user) {
-					return _.pick(user, "name", "id", "screen_name");
+					return _.pick(user, "name", "id", "screen_name", "profile_image_url");
 				});
 				followings.push(cleanUsers);
 				callToDo --;
@@ -187,20 +188,23 @@ angular.module('twitterListApp')
 	*/
 
 	this.filterTable = function(toFilter) {
-		var updatedMatrix = InappService.matrix;
-		if(toFilter === "withoutList") {
-			InappService.matrix = _.reject(updatedMatrix, function(item) {
-				return item.score !== 0;
-			});
-			PaginationService.groupToPages(InappService.matrix);
-		} else if(toFilter === "withMultipleLists") {
-			InappService.matrix = _.reject(updatedMatrix, function(item) {
-				return item.score === 0 || item.score === 1 ;
-			});
-			PaginationService.groupToPages(InappService.matrix);
-		} else {
-			InappService.matrix = buildMatrix(InappService.users);
-			PaginationService.groupToPages(InappService.matrix);
+		InappService.matrix = buildMatrix(InappService.users);
+		switch (toFilter) {
+			case "noFilter":
+				PaginationService.groupToPages(InappService.matrix);
+				break;
+			case "withoutList":
+				InappService.matrix = _.reject(InappService.matrix, function(item) {
+					return item.score !== 0;
+				});
+				PaginationService.groupToPages(InappService.matrix);
+				break;
+			case "withMultiList":
+				InappService.matrix = _.reject(InappService.matrix, function(item) {
+					return item.score === 0 || item.score === 1 ;
+				});
+				PaginationService.groupToPages(InappService.matrix);
+				break;
 		}
 	};
 
@@ -209,46 +213,57 @@ angular.module('twitterListApp')
 	*/
 
 	this.initializeTableWithDatas = function() {
-		// First step: Get all the list created by the user
+		// First step: Get all the lists created by the user
 		getTwitterInfos.get('/lists/ownerships').then(function(data) {
-			// Second set: get all the users in these lists
-			getUsersInLists(data.lists).then(function(data) {
-				InappService.listOfLists = _.sortBy(data, function (obj) {return obj.name;}); // sort the list in alphabetical order
-				// Third step: get the last following of the user (max: 200)
-				/* 
-					Strategy :
-					Due to Api rate limit on the GET friends/list request (15 calls every 15mins)
-					We distinguish two cases: 
-						- If the user has more than 2800 followings (15 * 200) we will chain the first 15calls and do the rest later.
-						- If the user has less than 2800 followings (the majority) we will chain all these calls.
-				*/
-				getTwitterInfos.get('/account/verify_credentials').then(function(data) {
-					var callToDo = Math.ceil((data.friends_count) / 200);
-					// If more than 2800 followings
-					if (callToDo > 15) {
-						getFollowings(15).then(function(userResult) {
-							// Fourth step: build the scorelist, matrix and user objects
-							InappService.users = _.flatten(userResult);
-							InappService.matrix = buildMatrix(InappService.users);
-							// Fifth step: initialized the pagination of the matrix
-							PaginationService.initializeUserNb(InappService.users.length);
-							PaginationService.groupToPages(InappService.matrix);
-							$state.go('inapp.displayData');
-							/* TODO : indicate the user that we have to wait 15min now */
-						});
-					} else {
-						getFollowings(callToDo).then(function(userResult) {
-							// Fourth step: build the scorelist, matrix and user objects
-							InappService.users = _.flatten(userResult);
-							InappService.matrix = buildMatrix(InappService.users);
-							// Fifth step: initialized the pagination of the matrix
-							PaginationService.initializeUserNb(InappService.users.length);
-							PaginationService.groupToPages(InappService.matrix);
-							$state.go('inapp.displayData');
-						});
-					}
+			if(data.lists.length === 0) {
+				InappService.listOfLists = [{name:"First List..."}, {name:"Second List..."}];
+				getFollowings(1).then(function(userResult) {
+					InappService.users = _.flatten(userResult);
+					InappService.matrix = buildMatrix(InappService.users);
+					PaginationService.initializeUserNb(InappService.users.length);
+					PaginationService.groupToPages(InappService.matrix);
+					$state.go('inapp.displayDataEmptyList');
 				});
-			});
+			} else {
+				// Second step: get all the users in these lists
+				getUsersInLists(data.lists).then(function(data) {
+					InappService.listOfLists = _.sortBy(data, function (obj) {return obj.name;}); // sort the list in alphabetical order
+					// Third step: get the last followings of the user (max: 200)
+					/* 
+						Strategy :
+						Due to Api rate limit on the GET friends/list request (15 calls every 15mins)
+						We distinguish two cases: 
+							- If the user has more than 2800 followings (15 * 200) we will chain the first 15calls and do the rest later.
+							- If the user has less than 2800 followings (the majority) we will chain all these calls.
+					*/
+					getTwitterInfos.get('/account/verify_credentials').then(function(data) {
+						var callToDo = Math.ceil((data.friends_count) / 200);
+						// If more than 2800 followings
+						if (callToDo > 15) {
+							getFollowings(15).then(function(userResult) {
+								// Fourth step: build the scorelist, matrix and user objects
+								InappService.users = _.flatten(userResult);
+								InappService.matrix = buildMatrix(InappService.users);
+								// Fifth step: initialized the pagination of the matrix
+								PaginationService.initializeUserNb(InappService.users.length);
+								PaginationService.groupToPages(InappService.matrix);
+								$state.go('inapp.displayData');
+								/* TODO : indicate the user that we have to wait 15min now */
+							});
+						} else {
+							getFollowings(callToDo).then(function(userResult) {
+								// Fourth step: build the scorelist, matrix and user objects
+								InappService.users = _.flatten(userResult);
+								InappService.matrix = buildMatrix(InappService.users);
+								// Fifth step: initialized the pagination of the matrix
+								PaginationService.initializeUserNb(InappService.users.length);
+								PaginationService.groupToPages(InappService.matrix);
+								$state.go('inapp.displayData');
+							});
+						}
+					});
+				});
+			}
 		}, function (error) {
 			console.error('handle error: ' + error.stack);
 			throw error;
