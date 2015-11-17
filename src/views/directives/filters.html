@@ -1,11 +1,11 @@
 <div class="category-container">
 	<div class="category category--all" ng-click="filterList('noFilter')" ng-class="{'category--active':selectedTab === 'noFilter'}">
-		<span class="category__title">All Followings</span> ({{Hello}})
+		<span class="category__title">All Followings</span> ({{listCount.noFilter}})
 	</div>
 	<div class="category category--wo-list" ng-click="filterList('withoutList')" ng-class="{'category--active':selectedTab === 'withoutList'}">
-		<span class="category__title">Without list</span> ({{Hello}})
+		<span class="category__title">Without list</span> ({{listCount.withoutList}})
 	</div>
 	<div class="category category--wm-list" ng-click="filterList('withMultiList')" ng-class="{'category--active':selectedTab === 'withMultiList'}">
-		<span class="category__title">With multiple list</span> ({{Hello}})
+		<span class="category__title">With multiple list</span> ({{listCount.withMultiList}})
 	</div>
 </div>

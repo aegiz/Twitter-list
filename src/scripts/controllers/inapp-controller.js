@@ -3,7 +3,7 @@
 angular.module('twitterListApp')
 .controller('InappCtrl', ['$scope', 'InappService', '$state', function($scope, InappService, $state) {
 	
-	// Watch of all the variables
+	// Watch the variables of our services and transmit them to the controller
 
 	/*
 	* listOfLists: 
@@ -81,6 +81,17 @@ angular.module('twitterListApp')
 		return InappService.currentPage;
 	}, function(newVal, oldVal) {
 		$scope.currentPage = newVal;
+	}, true);
+
+	/*
+	* listCount: 
+	* This array list the number of occurences of users type (all, withoutlist, withmultiplelist)
+	*/
+
+	$scope.$watch(function () {
+		return InappService.listCount;
+	}, function(newVal, oldVal) {
+		$scope.listCount = newVal;
 	}, true);
 
 }]);

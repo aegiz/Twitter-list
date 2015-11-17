@@ -180,31 +180,43 @@ angular.module('twitterListApp')
 			});
 		});
 		InappService.matrix = updatedMatrix;
+		//that.filterTable("noFilter"); bug car InappService.users n'a pas été reinitialisé
 	};
 
 	/*
-	* Filter the matrix object to only keep certain users
+	* Filter the matrix object to only keep certain users, paginate, and count occurences
 	* @param {String} toFilter.
 	*/
 
-	this.filterTable = function(toFilter) {
+	that.filterTable = function(toFilter) {
+		// Reset the matrix
 		InappService.matrix = buildMatrix(InappService.users);
+		var matrixWithoutList = _.reject(InappService.matrix, function(item) {
+			return item.score !== 0;
+		});
+		var matrixWithMultiList = _.reject(InappService.matrix, function(item) {
+			return item.score === 0 || item.score === 1 ;
+		});
+		// Count occurences
+		InappService.listCount = {
+			"noFilter" : InappService.matrix.length,
+			"withoutList": matrixWithoutList.length,
+			"withMultiList": matrixWithMultiList.length
+		}
+
+		// Group to pages
 		switch (toFilter) {
 			case "noFilter":
 				PaginationService.groupToPages(InappService.matrix);
 				break;
 			case "withoutList":
-				InappService.matrix = _.reject(InappService.matrix, function(item) {
-					return item.score !== 0;
-				});
-				PaginationService.groupToPages(InappService.matrix);
+				PaginationService.groupToPages(matrixWithoutList);
 				break;
 			case "withMultiList":
-				InappService.matrix = _.reject(InappService.matrix, function(item) {
-					return item.score === 0 || item.score === 1 ;
-				});
-				PaginationService.groupToPages(InappService.matrix);
+				PaginationService.groupToPages(matrixWithMultiList);
 				break;
+			default: 
+				console.log("Error toFilter is not defined");
 		}
 	};
 
@@ -243,7 +255,8 @@ angular.module('twitterListApp')
 							getFollowings(15).then(function(userResult) {
 								// Fourth step: build the scorelist, matrix and user objects
 								InappService.users = _.flatten(userResult);
-								InappService.matrix = buildMatrix(InappService.users);
+								that.filterTable("noFilter");
+								//InappService.matrix = buildMatrix(InappService.users);
 								// Fifth step: initialized the pagination of the matrix
 								PaginationService.initializeUserNb(InappService.users.length);
 								PaginationService.groupToPages(InappService.matrix);
@@ -254,7 +267,8 @@ angular.module('twitterListApp')
 							getFollowings(callToDo).then(function(userResult) {
 								// Fourth step: build the scorelist, matrix and user objects
 								InappService.users = _.flatten(userResult);
-								InappService.matrix = buildMatrix(InappService.users);
+								that.filterTable("noFilter");
+								//InappService.matrix = buildMatrix(InappService.users);
 								// Fifth step: initialized the pagination of the matrix
 								PaginationService.initializeUserNb(InappService.users.length);
 								PaginationService.groupToPages(InappService.matrix);
