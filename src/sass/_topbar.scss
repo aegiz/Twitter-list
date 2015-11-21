@@ -28,6 +28,10 @@
 	}
 }
 
+.category--all {
+	border-left: 1px solid $border-grey;
+}
+
 .category--active {
 	background-color: #FFF;
 	border-bottom: 0;
@@ -46,9 +50,34 @@
 .searchBar {
 	display: table-cell;
 	vertical-align: middle;
+	padding: 23px 15px 23px 9%;
 	width: 30%;
 	text-align: right;
 	background-color: $middle-grey;
 	border-bottom: 1px solid $border-grey;
-	padding-right: 15px;
 }
+
+.searchBar__inner {
+	position: relative;
+	&:before {
+		content: "";
+		position: absolute;
+		top: calc(50% - 8px);
+		left: 10px;
+		display: block;
+		background: url('/assets/images/search.svg') no-repeat center center;
+		width: 16px;
+		height: 16px;
+	}
+	input {
+		font-size: 1.3rem;
+		width: 100%;
+		border: 1px solid $border-grey;
+		padding: 9px 18px 9px 36px;
+		margin: 0;
+		&:focus {
+			outline: none;
+		}
+	}
+}
+

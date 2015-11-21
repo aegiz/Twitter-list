@@ -18,6 +18,10 @@ var config = {
     src: srcDir + '/',
     dest: destDir + '/'
   },
+  images: {
+    src: srcDir + '/images',
+    dest: destDir + '/assets/images'
+  },
   sass: {
     src: srcDir + '/sass',
     dest: destDir + '/assets/css'
@@ -62,7 +66,6 @@ gulp.task('templates', function () {
     .pipe($$.connect.reload());
 });
 
-
 gulp.task('sass', function() {
   return gulp.src(config.sass.src + '/*.scss')
   .pipe($$.sass())
@@ -79,23 +82,32 @@ gulp.task('font', function () {
   .pipe($$.connect.reload());
 });
 
-
 gulp.task('javascript', function () {
   return gulp.src($$.mainBowerFiles().concat(config.js.src + '/**/*.js'))
     .pipe($$.concat('all.js'))
     .pipe(gulp.dest(config.js.dest))
     .pipe($$.connect.reload());
-})
+});
+
+gulp.task('images', function () {
+  return gulp.src(config.images.src + '/**/*')
+  .pipe($$.imagemin())
+  .pipe(gulp.dest(config.images.dest))
+  .pipe($$.connect.reload());
+});
 
 gulp.task('watch', function () {
   gulp.watch(config.sass.src + '/*.scss', ['sass']);
   gulp.watch(config.js.src + '/**/*.js', ['javascript']);
   gulp.watch(config.html.src + 'index.html', ['index']);
+  gulp.watch(config.images.src + '/*', ['images']);
   gulp.watch(config.html.src + '/views/**/*.html', ['templates']);
 });
 
-gulp.task('build', ['index', 'templates', 'sass', 'javascript', 'font']);
+gulp.task('build', ['index', 'templates', 'sass', 'images', 'javascript', 'font']);
 
 gulp.task('default', ['build'], function() {
   gulp.start('connect', 'watch');
 });
+
+gulp.task('compress', ['images']);

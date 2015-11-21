@@ -11,8 +11,8 @@
 		<tbody class="table__body">
 			<tr class="table__row" ng-repeat="item in pagedItems[currentPage]" viewport-watch>
 				<td class="table__cell table__cell--td table__cell--user-infos">
-					<div class="user-picture">	
-						<img src="{{item.profile_image_url}}">
+					<div class="user-picture">
+						<img ng-src="{{ item.profile_image_url || 'assets/images/default-profile.png' }}" />
 					</div>
 					<div class="user-infos">
 						<div>
