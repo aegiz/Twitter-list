@@ -38,8 +38,8 @@ angular.module('twitterListApp')
    	$scope.handleValidation = function() {
 		TableService.subscribeUsers($scope.cellToUpdate).then(function() {
 			// Update Matrix and ListOfList
-			TableService.updateMatrix($scope.cellToUpdate);
 			TableService.updateListOfList($scope.cellToUpdate);
+			TableService.updateUsers($scope.cellToUpdate);
 			
 			$scope.cellToUpdate = [];
 			$scope.showConfirmationMsg = true;

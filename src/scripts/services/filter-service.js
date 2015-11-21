@@ -4,13 +4,13 @@ angular.module('twitterListApp')
 	this.filterList = function (value) {
 		switch (value) {
 			case "noFilter":
-				TableService.filterTable("noFilter");
+				TableService.updateTable("noFilter");
 				break;
 			case "withoutList":
-				TableService.filterTable("withoutList");
+				TableService.updateTable("withoutList");
 				break;
 			case "withMultiList":
-				TableService.filterTable("withMultiList");
+				TableService.updateTable("withMultiList");
 				break;
 		}
 	};

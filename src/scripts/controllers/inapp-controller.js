@@ -12,7 +12,7 @@ angular.module('twitterListApp')
 	* A single list has these properties: {id: ,name:, user: Array }. 
 	* ... Where users is an array of users contains in the list
 	
-	* Obj: listOfLists is handy when we have to calculate the score of a following (step performed during init and validation)
+	* Objective: listOfLists is handy when we have to calculate the score of a following (step performed during init and validation)
 	*/
 
 	$scope.$watch(function () {
@@ -28,7 +28,7 @@ angular.module('twitterListApp')
 	* A collection of all the people our connected user follow. 
 	* Structure: users = [Object, Object, ...] 
 
-	* Obj: users' object help to build the matrix (step performed during init and reset of user after some clicks on the filtering)
+	* Objective: users' object help to build the matrix (step performed during init and reset of user after some clicks on the filtering)
 	*/
 
 	$scope.$watch(function () {
@@ -45,7 +45,7 @@ angular.module('twitterListApp')
 	* This Array is a copy of users' object. The difference is that in each user there is an associated belongsToList object. 
 	* in belongsToList we list if the current person belong to the list or not.
 
-	* Obj: matrix is used to build a new object pagedItems
+	* Objective: matrix is used to build a new object pagedItems
 	*/
 
 	$scope.$watch(function () {
@@ -60,7 +60,7 @@ angular.module('twitterListApp')
 	* pagedItems: 
 	* This Array is build construite from matrix decomposition in sub-pages
 
-	* Obj: pagedItems is specially dedicated to display the informations on the screen
+	* Objective: pagedItems is specially dedicated to display the informations on the screen
 	*/
 
 	$scope.$watch(function () {

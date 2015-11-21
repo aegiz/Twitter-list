@@ -162,11 +162,11 @@ angular.module('twitterListApp')
 	};
 
 	/*
-	* Update the matrix
+	* Update the users' array with the correct score and belongtolist
     * @param {Object} usersToUpdate. The list of users to update.
 	*/
 
-	this.updateMatrix = function(usersToUpdate) {
+	this.updateUsers = function(usersToUpdate) {
 		var updatedMatrix = InappService.matrix;
 		_.each(updatedMatrix, function(usr) {
 			_.each(usersToUpdate, function(userToUpdate) {
@@ -179,17 +179,17 @@ angular.module('twitterListApp')
 				}
 			});
 		});
-		InappService.matrix = updatedMatrix;
-		//that.filterTable("noFilter"); bug car InappService.users n'a pas été reinitialisé
+		InappService.users = updatedMatrix;
+		that.updateTable("noFilter");
 	};
 
 	/*
-	* Filter the matrix object to only keep certain users, paginate, and count occurences
+	* Update the table to present the correct datas (list count in topbar, users according to the filters)
 	* @param {String} toFilter.
 	*/
 
-	that.filterTable = function(toFilter) {
-		// Reset the matrix
+	that.updateTable = function(toFilter) {
+		// Build the matrix
 		InappService.matrix = buildMatrix(InappService.users);
 		var matrixWithoutList = _.reject(InappService.matrix, function(item) {
 			return item.score !== 0;
@@ -203,7 +203,6 @@ angular.module('twitterListApp')
 			"withoutList": matrixWithoutList.length,
 			"withMultiList": matrixWithMultiList.length
 		}
-
 		// Group to pages
 		switch (toFilter) {
 			case "noFilter":
@@ -255,7 +254,7 @@ angular.module('twitterListApp')
 							getFollowings(15).then(function(userResult) {
 								// Fourth step: build the scorelist, matrix and user objects
 								InappService.users = _.flatten(userResult);
-								that.filterTable("noFilter");
+								that.updateTable("noFilter");
 								//InappService.matrix = buildMatrix(InappService.users);
 								// Fifth step: initialized the pagination of the matrix
 								PaginationService.initializeUserNb(InappService.users.length);
@@ -267,7 +266,7 @@ angular.module('twitterListApp')
 							getFollowings(callToDo).then(function(userResult) {
 								// Fourth step: build the scorelist, matrix and user objects
 								InappService.users = _.flatten(userResult);
-								that.filterTable("noFilter");
+								that.updateTable("noFilter");
 								//InappService.matrix = buildMatrix(InappService.users);
 								// Fifth step: initialized the pagination of the matrix
 								PaginationService.initializeUserNb(InappService.users.length);
