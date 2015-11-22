@@ -108,29 +108,20 @@ angular.module('twitterListApp')
 	}
 
 	/*
-	* Chain all the calls concerning the subsciption/unsubscription of the targetted users
+	* Subscribe or remove user from list
 	* @param {Object} items.
 	*/
 
-	this.subscribeUsers = function(items) {
+	this.subscribeUser = function(infos) {
 		var deferred = $q.defer();
-		var subscribe = function (index) {
-			var item = items[index];
-			if (!item) {
-				deferred.resolve("ok");
-				return;
-			}
-			getTwitterInfos.post('/lists/members/' + item.infosCell.actionTodo + '?list_id=' + item.infosCell.list_id + '&user_id=' + item.infosCell.user_id)
-			.then(function (data) {
-				subscribe(++index); // recursif
-			})
-			.catch(function (err) {
-				deferred.reject(err);
-			});
-		};
-
-		subscribe(0);
-
+		getTwitterInfos.post('/lists/members/' + infos.actionTodo + '?list_id=' + infos.list_id + '&user_id=' + infos.user_id)
+		.then(function (data) {
+			deferred.resolve("ok");
+			return;
+		})
+		.catch(function (err) {
+			deferred.reject(err);
+		});
 		return deferred.promise;
 	};
 
@@ -140,47 +131,43 @@ angular.module('twitterListApp')
     * (TODO : improve this function)
 	*/
 
-	this.updateListOfList = function(usersToUpdate) {
+	this.updateListOfList = function(userToUpdate) {
 		var updatedListOfList = InappService.listOfLists;
-		_.each(usersToUpdate, function(userToUpdate) {
-			_.each(updatedListOfList, function(list) {
-				if(list.id === userToUpdate.infosCell.list_id) {
-					// Add new user to array
-					if(userToUpdate.infosCell.actionTodo === "create" ) {
-						list.users.push({id: userToUpdate.infosCell.user_id});
-					// Remove user to Array
-					} else {
-						for(var i = 0; i< list.users.length; i++) {
-							if(list.users[i].id === userToUpdate.infosCell.user_id) {
-								list.users.splice(i, 1);
-							}
+		_.each(updatedListOfList, function(list) {
+			if(list.id === userToUpdate.list_id) {
+				// Add new user to array
+				if(userToUpdate.actionTodo === "create" ) {
+					list.users.push({id: userToUpdate.user_id});
+				// Remove user to Array
+				} else {
+					for(var i = 0; i< list.users.length; i++) {
+						if(list.users[i].id === userToUpdate.user_id) {
+							list.users.splice(i, 1);
 						}
 					}
 				}
-			});
-		});         
+			}
+		});       
 	};
 
 	/*
 	* Update the users' array with the correct score and belongtolist
-    * @param {Object} usersToUpdate. The list of users to update.
+    * @param {Object} userToUpdate. The list of users to update.
 	*/
 
-	this.updateUsers = function(usersToUpdate) {
+	this.updateUsers = function(userToUpdate) {
 		var updatedMatrix = InappService.matrix;
 		_.each(updatedMatrix, function(usr) {
-			_.each(usersToUpdate, function(userToUpdate) {
-				if(usr.id === userToUpdate.infosCell.user_id) {
-					// Updating score
-					usr.score = ((userToUpdate.infosCell.actionTodo === "create") ? usr.score + 1 : usr.score - 1);
-					// Updating list belongings
-					var listToUpdate = _.findWhere(usr.belongsToList,{list_id:userToUpdate.infosCell.list_id});
-					listToUpdate.init_subscribed = listToUpdate.subscribed;
-				}
-			});
+			if(usr.id === userToUpdate.user_id) {
+				// Updating score
+				usr.score = ((userToUpdate.actionTodo === "create") ? usr.score + 1 : usr.score - 1);
+				// Updating list belongings
+				var listToUpdate = _.findWhere(usr.belongsToList,{list_id:userToUpdate.list_id});
+				listToUpdate.init_subscribed = listToUpdate.subscribed;
+			}
 		});
 		InappService.users = updatedMatrix;
-		that.updateTable("noFilter");
+		that.updateTable(InappService.selectedTab.currentTab);
 	};
 
 	/*
@@ -197,12 +184,13 @@ angular.module('twitterListApp')
 		var matrixWithMultiList = _.reject(InappService.matrix, function(item) {
 			return item.score === 0 || item.score === 1 ;
 		});
-		// Count occurences
-		InappService.listCount = {
-			"noFilter" : InappService.matrix.length,
-			"withoutList": matrixWithoutList.length,
-			"withMultiList": matrixWithMultiList.length
-		}
+		// Topbar update
+		InappService.selectedTab = {
+			"currentTab": toFilter,
+			"noFilterLength" : InappService.matrix.length,
+			"withoutListLength": matrixWithoutList.length,
+			"withMultiListLength": matrixWithMultiList.length
+		};
 		// Group to pages
 		switch (toFilter) {
 			case "noFilter":

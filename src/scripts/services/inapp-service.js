@@ -8,7 +8,7 @@ angular.module('twitterListApp')
 			matrix = [],
    			currentPage = 0,
 			pagedItems = [],
-			listCount = {};
+			selectedTab = {};
 		return {
 			listOfLists: listOfLists,
 			users: users,
@@ -16,6 +16,6 @@ angular.module('twitterListApp')
 			matrix: matrix,
 			currentPage: currentPage,
 			pagedItems: pagedItems,
-			listCount: listCount
+			selectedTab: selectedTab
 		};
 	}]);

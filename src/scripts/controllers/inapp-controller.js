@@ -84,14 +84,14 @@ angular.module('twitterListApp')
 	}, true);
 
 	/*
-	* listCount: 
-	* This array list the number of occurences of users type (all, withoutlist, withmultiplelist)
+	* selectedTab: 
+	* ...
 	*/
 
 	$scope.$watch(function () {
-		return InappService.listCount;
+		return InappService.selectedTab;
 	}, function(newVal, oldVal) {
-		$scope.listCount = newVal;
+		$scope.selectedTab = newVal;
 	}, true);
 
 }]);

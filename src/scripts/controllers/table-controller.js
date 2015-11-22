@@ -3,8 +3,6 @@
 angular.module('twitterListApp')
 .controller('TableCtrl', ['$scope', 'TableService', 'PaginationService', '$timeout', function($scope, TableService, PaginationService, $timeout) {
 
-	$scope.cellToUpdate = [];
-
 	/*
 	* Call on every clicks of the table's checkbox.
 	* Then, will update an  array cellToUpdate  with the changes to perform.
@@ -16,7 +14,7 @@ angular.module('twitterListApp')
 	*/
 
 	$scope.handleInputClick = function(infos) {
-		if(infos.subscribed !== infos.init_subscribed) {
+		/*if(infos.subscribed !== infos.init_subscribed) {
 			infos.actionTodo = (infos.subscribed) ? "create" : "destroy";
 			$scope.cellToUpdate.push({
 				"nameCell": infos.user_id + "-" + infos.list_id,
@@ -27,7 +25,16 @@ angular.module('twitterListApp')
 			$scope.cellToUpdate = _.filter($scope.cellToUpdate, function(el) {
 				return el.nameCell !== infos.user_id + "-" + infos.list_id;
 			});
-		}
+		}*/
+		infos.actionTodo = (infos.subscribed) ? "create" : "destroy";
+		TableService.subscribeUser(infos).then(function() {
+			TableService.updateListOfList(infos);
+			TableService.updateUsers(infos);
+			$scope.showConfirmationMsg = true;
+			$timeout(function() {
+				$scope.showConfirmationMsg = false;
+			}, 3000);
+		});
 	};
 
    	/*
@@ -36,7 +43,7 @@ angular.module('twitterListApp')
    	*/
 
    	$scope.handleValidation = function() {
-		TableService.subscribeUsers($scope.cellToUpdate).then(function() {
+		/*TableService.subscribeUsers($scope.cellToUpdate).then(function() {
 			// Update Matrix and ListOfList
 			TableService.updateListOfList($scope.cellToUpdate);
 			TableService.updateUsers($scope.cellToUpdate);
@@ -46,7 +53,7 @@ angular.module('twitterListApp')
 			$timeout(function() {
 				$scope.showConfirmationMsg = false;
 			}, 3000);
-		});
+		});*/
    	};
 
 }]);
