@@ -108,22 +108,39 @@ angular.module('twitterListApp')
 	}
 
 	/*
-	* Subscribe or remove user from list
-	* @param {Object} items.
+	* Queue the actions concerning the subscription or removal of selected users
+    * @param {Object} infos. Some relevant infos concerning what to do
 	*/
 
-	this.subscribeUser = function(infos) {
-		var deferred = $q.defer();
-		getTwitterInfos.post('/lists/members/' + infos.actionTodo + '?list_id=' + infos.list_id + '&user_id=' + infos.user_id)
-		.then(function (data) {
-			deferred.resolve("ok");
-			return;
-		})
-		.catch(function (err) {
-			deferred.reject(err);
-		});
-		return deferred.promise;
-	};
+	that.actionStack = [];
+	this.addAction = function(infos) {
+		that.actionStack.push(infos);
+		var launchAction = function(actionNb) {
+			var deferred = $q.defer();
+			getTwitterInfos.post('/lists/members/' + that.actionStack[actionNb].actionTodo + '?list_id=' + that.actionStack[actionNb].list_id + '&user_id=' + that.actionStack[actionNb].user_id)
+			.then(function (data) {
+				// Update & Clean
+				that.updateListOfList(infos);
+				that.updateUsers(infos);
+				that.actionStack.shift();
+				if(that.actionStack.length !==0) {
+					// Do the next action
+					launchAction(0);
+				}
+				deferred.resolve(data);
+				return;
+			})
+			.catch(function (err) {
+				deferred.reject(err);
+			});
+		};
+		
+		// If only one action execute it immediatemy
+		if(that.actionStack.length === 1) {
+			launchAction(0);
+		}
+	}
+	
 
 	/*
 	* Update the listOflist object
@@ -131,7 +148,7 @@ angular.module('twitterListApp')
     * (TODO : improve this function)
 	*/
 
-	this.updateListOfList = function(userToUpdate) {
+	that.updateListOfList = function(userToUpdate) {
 		var updatedListOfList = InappService.listOfLists;
 		_.each(updatedListOfList, function(list) {
 			if(list.id === userToUpdate.list_id) {
@@ -155,7 +172,7 @@ angular.module('twitterListApp')
     * @param {Object} userToUpdate. The list of users to update.
 	*/
 
-	this.updateUsers = function(userToUpdate) {
+	that.updateUsers = function(userToUpdate) {
 		var updatedMatrix = InappService.matrix;
 		_.each(updatedMatrix, function(usr) {
 			if(usr.id === userToUpdate.user_id) {

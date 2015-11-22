@@ -1,28 +1,48 @@
-<div class="table-container">
-	<table class="table" fixed-header>
-		<thead class="table__head">
-			<tr class="table__row">
-				<th class="table__cell table__cell--th table__cell--name">Name</th>
-				<th class="table__cell table__cell--th table__cell--list-name" ng-repeat="list in listOfLists">
+<div 
+	class="table-container">
+	<table 
+		class="table" 
+		fixed-header>
+		<thead 
+			class="table__head">
+			<tr 
+				class="table__row">
+				<th 
+					class="table__cell table__cell--th table__cell--name">
+					Name
+				</th>
+				<th 
+					class="table__cell table__cell--th table__cell--list-name"
+					ng-repeat="list in listOfLists">
 					{{list.name}}
 				</th>
 			</tr>
 		</thead>
-		<tbody class="table__body">
-			<tr class="table__row" ng-repeat="item in pagedItems[currentPage]" viewport-watch>
-				<td class="table__cell table__cell--td table__cell--user-infos">
-					<div class="user-picture">
-						<img ng-src="{{ item.profile_image_url || 'assets/images/default-profile.png' }}" />
+		<tbody 
+			class="table__body">
+			<tr 
+				class="table__row"
+				ng-repeat="item in pagedItems[currentPage] track by item.id"
+				viewport-watch>
+				<td 
+					class="table__cell table__cell--td table__cell--user-infos">
+					<div 
+						class="user-picture">
+						<img 
+							ng-src="{{ item.profile_image_url || 'assets/images/default-profile.png' }}" />
 					</div>
-					<div class="user-infos">
+					<div 
+						class="user-infos">
 						<div>
 							{{item.name}}<br>
 							@{{item.screen_name}}
 						</div>
 					</div>
 				</td>
-				<td class="table__cell table__cell--td table__cell--checkbox" ng-repeat="list in item.belongsToList">
-				   <input type="checkbox" class="checkbox" value="" name="check" ng-model="list.subscribed" ng-change="handleInputClick(list)">
+				<td 
+					class="table__cell table__cell--td table__cell--checkbox"
+					ng-repeat="list in item.belongsToList">
+				   	<input type="checkbox" class="checkbox" value="" name="check" ng-model="list.subscribed" ng-change="handleInputClick(list)">
 				</td>
 			</tr>   
 		</tbody>
