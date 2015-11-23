@@ -9,6 +9,6 @@ angular.module('twitterListApp')
 		}
 	});
 	$scope.search = function () {
-		SearchService.search($scope.matrix, $scope.query);
+		SearchService.search($scope.query);
 	};
 }]);

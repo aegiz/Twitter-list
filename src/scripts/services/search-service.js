@@ -8,8 +8,21 @@ angular.module('twitterListApp')
 			}
 			return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
 		};
-	this.search = function (matrix, query) {
-		InappService.filterInfos.currentTab = "noFilter";
+	this.search = function (query) {
+		var matrix = [];
+		switch (InappService.filterInfos.currentTab) {
+			case "noFilter": 
+				matrix = InappService.matrix;
+				break;
+			case "withoutList":
+				matrix = InappService.matrixWithoutList;
+				break;
+			case "withMultiList":
+				matrix = InappService.matrixWithMultiList;
+				break;
+			default: 
+				console.log("Error concerning matrix");
+		}
 		filteredItems = $filter('filter')(matrix, function (item) {
 			if (searchMatch(item.name, query)) {
 				return true;

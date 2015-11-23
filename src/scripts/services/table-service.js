@@ -58,7 +58,6 @@ angular.module('twitterListApp')
 				belongsToList[list.name] = {
 					"list_id": list.id,
 					"user_id": user.id,
-					"init_subscribed": followList,
 					"subscribed": followList
 				};
 				if(_.filter(list.users, function(usr) {
@@ -121,7 +120,7 @@ angular.module('twitterListApp')
 			.then(function (data) {
 				// Update & Clean
 				that.updateListOfList(infos);
-				that.updateUsers(infos);
+				that.updateMatrix(infos);
 				that.actionStack.shift();
 				if(that.actionStack.length !==0) {
 					// Do the next action
@@ -168,45 +167,55 @@ angular.module('twitterListApp')
 	};
 
 	/*
-	* Update the users' array with the correct score and belongtolist
+	* Build all the matrix
+	*/
+
+	that.initMatrix = function() {
+		// Build the different matrix
+		InappService.matrix = buildMatrix(InappService.users);
+		InappService.matrixWithoutList = _.reject(InappService.matrix, function(item) {
+			return item.score !== 0;
+		});
+		InappService.matrixWithMultiList = _.reject(InappService.matrix, function(item) {
+			return item.score === 0 || item.score === 1 ;
+		});
+	};
+
+	/*
+	* Update all the matrix with new score and belongtolist values
     * @param {Object} userToUpdate. The list of users to update.
 	*/
 
-	that.updateUsers = function(userToUpdate) {
+	that.updateMatrix = function(userToUpdate) {
 		var updatedMatrix = InappService.matrix;
 		_.each(updatedMatrix, function(usr) {
 			if(usr.id === userToUpdate.user_id) {
 				// Updating score
 				usr.score = ((userToUpdate.actionTodo === "create") ? usr.score + 1 : usr.score - 1);
-				// Updating list belongings
-				var listToUpdate = _.findWhere(usr.belongsToList,{list_id:userToUpdate.list_id});
-				listToUpdate.init_subscribed = listToUpdate.subscribed;
 			}
 		});
-		InappService.users = updatedMatrix;
-		that.updateTable(InappService.filterInfos.currentTab);
+		InappService.matrix = updatedMatrix;
+		InappService.matrixWithoutList = _.reject(updatedMatrix, function(item) {
+			return item.score !== 0;
+		});
+		InappService.matrixWithMultiList = _.reject(updatedMatrix, function(item) {
+			return item.score === 0 || item.score === 1 ;
+		});
+		that.fillTable(InappService.filterInfos.currentTab);
 	};
 
 	/*
-	* Update the table to present the correct datas (list count in topbar, users according to the filters)
+	* Fill the table with the correct datas (list count in topbar, users according to the filters)
 	* @param {String} toFilter.
 	*/
 
-	that.updateTable = function(toFilter) {
-		// Build the matrix
-		InappService.matrix = buildMatrix(InappService.users);
-		var matrixWithoutList = _.reject(InappService.matrix, function(item) {
-			return item.score !== 0;
-		});
-		var matrixWithMultiList = _.reject(InappService.matrix, function(item) {
-			return item.score === 0 || item.score === 1 ;
-		});
+	that.fillTable = function(toFilter) {
 		// Filters'tab update
 		InappService.filterInfos = {
 			"currentTab": toFilter,
 			"noFilterLength" : InappService.matrix.length,
-			"withoutListLength": matrixWithoutList.length,
-			"withMultiListLength": matrixWithMultiList.length
+			"withoutListLength": InappService.matrixWithoutList.length,
+			"withMultiListLength": InappService.matrixWithMultiList.length
 		};
 		// Group to pages to present the data
 		switch (toFilter) {
@@ -214,11 +223,10 @@ angular.module('twitterListApp')
 				PaginationService.groupToPages(InappService.matrix);
 				break;
 			case "withoutList":
-				// only update the PageItem value cause we want to keep the matrix value clean
-				PaginationService.groupToPages(matrixWithoutList); 
+				PaginationService.groupToPages(InappService.matrixWithoutList); 
 				break;
 			case "withMultiList":
-				PaginationService.groupToPages(matrixWithMultiList);
+				PaginationService.groupToPages(InappService.matrixWithMultiList);
 				break;
 			default: 
 				console.log("Error toFilter is not defined");
@@ -236,7 +244,8 @@ angular.module('twitterListApp')
 				InappService.listOfLists = [{name:"First List..."}, {name:"Second List..."}];
 				getFollowings(1).then(function(userResult) {
 					InappService.users = _.flatten(userResult);
-					InappService.matrix = buildMatrix(InappService.users);
+					that.initMatrix();
+					that.fillTable("noFilter");
 					PaginationService.initializeUserNb(InappService.users.length);
 					PaginationService.groupToPages(InappService.matrix);
 					$state.go('inapp.displayDataEmptyList');
@@ -258,10 +267,10 @@ angular.module('twitterListApp')
 						// If more than 2800 followings
 						if (callToDo > 15) {
 							getFollowings(15).then(function(userResult) {
-								// Fourth step: build the scorelist, matrix and user objects
+								// Fourth step: build the matrix and fill the table
 								InappService.users = _.flatten(userResult);
-								that.updateTable("noFilter");
-								//InappService.matrix = buildMatrix(InappService.users);
+								that.initMatrix();
+								that.fillTable("noFilter");
 								// Fifth step: initialized the pagination of the matrix
 								PaginationService.initializeUserNb(InappService.users.length);
 								PaginationService.groupToPages(InappService.matrix);
@@ -270,10 +279,10 @@ angular.module('twitterListApp')
 							});
 						} else {
 							getFollowings(callToDo).then(function(userResult) {
-								// Fourth step: build the scorelist, matrix and user objects
+								// Fourth step: build the matrix and fill the table
 								InappService.users = _.flatten(userResult);
-								that.updateTable("noFilter");
-								//InappService.matrix = buildMatrix(InappService.users);
+								that.initMatrix();
+								that.fillTable("noFilter");
 								// Fifth step: initialized the pagination of the matrix
 								PaginationService.initializeUserNb(InappService.users.length);
 								PaginationService.groupToPages(InappService.matrix);

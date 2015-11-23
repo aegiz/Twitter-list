@@ -4,9 +4,9 @@ angular.module('twitterListApp')
 	this.filter = function(value) {
 		// Set correct tab
 		InappService.filterInfos.currentTab = value;
-		// Erase search
+		// Reset search
 		SearchService.reset(true);
 		// Update table value
-		TableService.updateTable(value);
+		TableService.fillTable(value);
 	};
 }]);
