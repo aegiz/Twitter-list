@@ -1,6 +1,6 @@
 'use strict';
 angular.module('twitterListApp')
-.service('SearchService', ['PaginationService', '$filter', function(PaginationService, $filter) {
+.service('SearchService', ['InappService', 'PaginationService', '$filter', function(InappService, PaginationService, $filter) {
 	var filteredItems = [],
 		searchMatch = function (haystack, needle) {
 			if (!needle) {
@@ -9,6 +9,7 @@ angular.module('twitterListApp')
 			return haystack.toLowerCase().indexOf(needle.toLowerCase()) !== -1;
 		};
 	this.search = function (matrix, query) {
+		InappService.filterInfos.currentTab = "noFilter";
 		filteredItems = $filter('filter')(matrix, function (item) {
 			if (searchMatch(item.name, query)) {
 				return true;
@@ -16,5 +17,8 @@ angular.module('twitterListApp')
 			return false;
 		});
 		PaginationService.groupToPages(filteredItems);
+	};
+	this.reset = function (value) {
+		InappService.clearSearch = value;
 	};
 }]);

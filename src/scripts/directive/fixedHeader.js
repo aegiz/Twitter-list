@@ -2,8 +2,8 @@
 angular.module('twitterListApp')
 	.directive('fixedHeader', ['$timeout', function($timeout) {
 		return {
-				restrict: 'A',
-				link: link
+			restrict: 'A',
+			link: link
 		};
 
 		function link($scope, $elem, $attrs, $ctrl) {

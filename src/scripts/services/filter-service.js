@@ -1,5 +1,12 @@
 'use strict';
 angular.module('twitterListApp')
-.service('FiltersService', ['TableService', function(TableService) {
-	
+.service('FiltersService', ['InappService', 'SearchService', 'TableService', function(InappService, SearchService, TableService) {
+	this.filter = function(value) {
+		// Set correct tab
+		InappService.filterInfos.currentTab = value;
+		// Erase search
+		SearchService.reset(true);
+		// Update table value
+		TableService.updateTable(value);
+	};
 }]);

@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('twitterListApp')
-.controller('FiltersCtrl', ['$scope', 'InappService', 'TableService', function($scope, InappService, TableService) {
+.controller('FiltersCtrl', ['FiltersService', '$scope', function(FiltersService, $scope) {
 	$scope.filterList = function (value) {
-		InappService.selectedTab.currentTab = value;
-		TableService.updateTable(value);
+		FiltersService.filter(value);
 	};
 }]);

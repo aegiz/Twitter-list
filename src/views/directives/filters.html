@@ -1,11 +1,11 @@
 <div class="category-container">
-	<div class="category category--all" ng-click="filterList('noFilter')" ng-class="{'category--active':(selectedTab.currentTab === 'noFilter')}">
-		<span class="category__title">All Followings</span> ({{selectedTab.noFilterLength}})
+	<div class="category category--all" ng-click="filterList('noFilter')" ng-class="{'category--active':(filterInfos.currentTab === 'noFilter')}">
+		<span class="category__title">All Followings</span> ({{filterInfos.noFilterLength}})
 	</div>
-	<div class="category category--wo-list" ng-click="filterList('withoutList')" ng-class="{'category--active':(selectedTab.currentTab === 'withoutList')}">
-		<span class="category__title">Without list</span> ({{selectedTab.withoutListLength}})
+	<div class="category category--wo-list" ng-click="filterList('withoutList')" ng-class="{'category--active':(filterInfos.currentTab === 'withoutList')}">
+		<span class="category__title">Without list</span> ({{filterInfos.withoutListLength}})
 	</div>
-	<div class="category category--wm-list" ng-click="filterList('withMultiList')" ng-class="{'category--active':(selectedTab.currentTab === 'withMultiList')}">
-		<span class="category__title">With multiple list</span> ({{selectedTab.withMultiListLength}})
+	<div class="category category--wm-list" ng-click="filterList('withMultiList')" ng-class="{'category--active':(filterInfos.currentTab === 'withMultiList')}">
+		<span class="category__title">With multiple list</span> ({{filterInfos.withMultiListLength}})
 	</div>
 </div>

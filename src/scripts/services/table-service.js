@@ -145,7 +145,7 @@ angular.module('twitterListApp')
 	/*
 	* Update the listOflist object
     * @param {Object} usersToUpdate. The list of users to update.
-    * (TODO : improve this function)
+    * (TODO : improve this function with the for loop - bad)
 	*/
 
 	that.updateListOfList = function(userToUpdate) {
@@ -184,7 +184,7 @@ angular.module('twitterListApp')
 			}
 		});
 		InappService.users = updatedMatrix;
-		that.updateTable(InappService.selectedTab.currentTab);
+		that.updateTable(InappService.filterInfos.currentTab);
 	};
 
 	/*
@@ -201,20 +201,21 @@ angular.module('twitterListApp')
 		var matrixWithMultiList = _.reject(InappService.matrix, function(item) {
 			return item.score === 0 || item.score === 1 ;
 		});
-		// Topbar update
-		InappService.selectedTab = {
+		// Filters'tab update
+		InappService.filterInfos = {
 			"currentTab": toFilter,
 			"noFilterLength" : InappService.matrix.length,
 			"withoutListLength": matrixWithoutList.length,
 			"withMultiListLength": matrixWithMultiList.length
 		};
-		// Group to pages
+		// Group to pages to present the data
 		switch (toFilter) {
 			case "noFilter":
 				PaginationService.groupToPages(InappService.matrix);
 				break;
 			case "withoutList":
-				PaginationService.groupToPages(matrixWithoutList);
+				// only update the PageItem value cause we want to keep the matrix value clean
+				PaginationService.groupToPages(matrixWithoutList); 
 				break;
 			case "withMultiList":
 				PaginationService.groupToPages(matrixWithMultiList);

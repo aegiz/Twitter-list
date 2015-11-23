@@ -3,7 +3,8 @@
 angular.module('twitterListApp')
 .controller('InappCtrl', ['$scope', 'InappService', '$state', function($scope, InappService, $state) {
 	
-	// Watch the variables of our services and transmit them to the controller
+	// Objective: Share these variables accross the different scopes
+	// Implementation: Watch the variables of our services and transmit them to the controller
 
 	/*
 	* listOfLists: 
@@ -12,7 +13,7 @@ angular.module('twitterListApp')
 	* A single list has these properties: {id: ,name:, user: Array }. 
 	* ... Where users is an array of users contains in the list
 	
-	* Objective: listOfLists is handy when we have to calculate the score of a following (step performed during init and validation)
+	* Role: listOfLists is handy when we have to calculate the score of a following (step performed during init and validation)
 	*/
 
 	$scope.$watch(function () {
@@ -28,7 +29,7 @@ angular.module('twitterListApp')
 	* A collection of all the people our connected user follow. 
 	* Structure: users = [Object, Object, ...] 
 
-	* Objective: users' object help to build the matrix (step performed during init and reset of user after some clicks on the filtering)
+	* Role: users' object help to build the matrix (step performed during init and reset of user after some clicks on the filtering)
 	*/
 
 	$scope.$watch(function () {
@@ -45,7 +46,7 @@ angular.module('twitterListApp')
 	* This Array is a copy of users' object. The difference is that in each user there is an associated belongsToList object. 
 	* in belongsToList we list if the current person belong to the list or not.
 
-	* Objective: matrix is used to build a new object pagedItems
+	* Role: matrix is used to build a new object pagedItems
 	*/
 
 	$scope.$watch(function () {
@@ -60,7 +61,7 @@ angular.module('twitterListApp')
 	* pagedItems: 
 	* This Array is build construite from matrix decomposition in sub-pages
 
-	* Objective: pagedItems is specially dedicated to display the informations on the screen
+	* Role: pagedItems is specially dedicated to display the informations on the screen
 	*/
 
 	$scope.$watch(function () {
@@ -84,14 +85,25 @@ angular.module('twitterListApp')
 	}, true);
 
 	/*
-	* selectedTab: 
-	* ...
+	* filterInfos: 
+	* Gather some informations about the tab (which on is selected, how many users in which etc.)
 	*/
 
 	$scope.$watch(function () {
-		return InappService.selectedTab;
+		return InappService.filterInfos;
 	}, function(newVal, oldVal) {
-		$scope.selectedTab = newVal;
+		$scope.filterInfos = newVal;
+	}, true);
+
+	/*
+	* clearSearch: 
+	* either or not clear the query
+	*/
+
+	$scope.$watch(function () {
+		return InappService.clearSearch;
+	}, function(newVal, oldVal) {
+		$scope.clearSearch = newVal;
 	}, true);
 
 }]);
