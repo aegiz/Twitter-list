@@ -39,10 +39,16 @@
 						</div>
 					</div>
 				</td>
-				<td 
+				<td
 					class="table__cell table__cell--td table__cell--checkbox"
 					ng-repeat="list in item.belongsToList">
-				   	<input type="checkbox" class="checkbox" value="" name="check" ng-model="list.subscribed" ng-change="handleInputClick(list)">
+						<input
+							type="checkbox"
+							class="checkbox"
+							value=""
+							name="check"
+							ng-model="list.subscribed"
+							ng-click="handleInputClick(list, $event)">
 				</td>
 			</tr>   
 		</tbody>
