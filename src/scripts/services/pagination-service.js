@@ -3,7 +3,7 @@
 angular.module('twitterListApp')
 .service('PaginationService', ['getTwitterInfos', 'InappService', '$filter', function(getTwitterInfos, InappService, $filter) {
 	
-	var itemsPerPage = 50;
+	var itemsPerPage = 0;
 
 	/*
 	* initialize the number of user to see in the viewport
@@ -11,21 +11,20 @@ angular.module('twitterListApp')
 	*/
 
 	this.initializeUserNb = function(followings) {
-		switch(followings) {
-			case followings < 800:
-				itemsPerPage = 50;
-				break;
-			case followings < 1120:
-				itemsPerPage = 70;
-				break;
-			case followings < 1600:
-				itemsPerPage = 100;
-				break;
-			case followings < 2800:
-				itemsPerPage = 175;
-				break;
-			 default:
-				itemsPerPage = 200;
+		if(followings < 50) {
+			itemsPerPage = 30;
+		} else if(followings < 200) {
+			itemsPerPage = 40;
+		} else if(followings < 800) {
+			itemsPerPage = 50;
+		} else if(followings < 1120) {
+			itemsPerPage = 70;
+		} else if(followings < 1600) {
+			itemsPerPage = 100;
+		} else if(followings <= 2800) {
+			itemsPerPage = 175;
+		} else {
+			itemsPerPage = 200;
 		}
 	};
 

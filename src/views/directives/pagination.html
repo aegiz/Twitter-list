@@ -1,15 +1,25 @@
 <div class="pagination pull-right">
-    <ul>
-        <li ng-class="{disabled: currentPage == 0}">
-            <a href ng-click="prevPage()">« Prev</a>
+    <ul class="pagination__list">
+        <li class="pagination__item pagination__item--left-arrow"
+            ng-class="{disabled: currentPage == 0}">
+            <a class="pagination__link"
+                ng-click="prevPage()">
+                <img src="assets/images/left-arrow.png" alt="left arrow">
+            </a>
         </li>
-        <li ng-repeat="n in range(pagedItems.length)"
+        <li class="pagination__item"
+            ng-repeat="n in range(pagedItems.length)"
             ng-class="{active: n == currentPage}"
-        ng-click="setPage()">
-            <a href ng-bind="n + 1">1</a>
+            ng-click="setPage()">
+            <a class="pagination__link"
+                ng-bind="n + 1">1</a>
         </li>
-        <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
-            <a href ng-click="nextPage()">Next »</a>
+        <li class="pagination__item pagination__item--right-arrow"
+            ng-class="{disabled: currentPage == pagedItems.length - 1}">
+            <a class="pagination__link"
+                ng-click="nextPage()">
+                <img src="assets/images/right-arrow.png" alt="right arrow">
+            </a>
         </li>
     </ul>
 </div>

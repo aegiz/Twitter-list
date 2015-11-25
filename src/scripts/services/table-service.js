@@ -267,25 +267,23 @@ angular.module('twitterListApp')
 						// If more than 2800 followings
 						if (callToDo > 15) {
 							getFollowings(15).then(function(userResult) {
-								// Fourth step: build the matrix and fill the table
+								// Fourth step: build the user object
 								InappService.users = _.flatten(userResult);
+								PaginationService.initializeUserNb(InappService.users.length);
+								// Fifth step: build the matrix and fill the table
 								that.initMatrix();
 								that.fillTable("noFilter");
-								// Fifth step: initialized the pagination of the matrix
-								PaginationService.initializeUserNb(InappService.users.length);
-								PaginationService.groupToPages(InappService.matrix);
 								$state.go('inapp.displayData');
 								/* TODO : indicate the user that we have to wait 15min now */
 							});
 						} else {
 							getFollowings(callToDo).then(function(userResult) {
-								// Fourth step: build the matrix and fill the table
+								// Fourth step: build the user object
 								InappService.users = _.flatten(userResult);
+								PaginationService.initializeUserNb(InappService.users.length);
+								// Fifth step: build the matrix and fill the table
 								that.initMatrix();
 								that.fillTable("noFilter");
-								// Fifth step: initialized the pagination of the matrix
-								PaginationService.initializeUserNb(InappService.users.length);
-								PaginationService.groupToPages(InappService.matrix);
 								$state.go('inapp.displayData');
 							});
 						}

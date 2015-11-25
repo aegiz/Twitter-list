@@ -19,6 +19,8 @@
 }
 
 html, body {
+	margin: 0;
+	padding: 0;
 	height: 100%;
 	background-color: #e9edf5;
 	font-family: 'Open Sans';
@@ -29,19 +31,15 @@ html {
 }
 
 body {
-  font-size: 1.6rem;
+  font-size: 1.6rem; /* to convert easily px => rem */
 }
 
 .main-container {
-	margin: 0 auto;
+	margin: 5% auto;
 	width: 90%;
-	margin-top: 50px;
-}
-
-.pagination {
-	margin: 0;
 }
 
 @import "inapp";
 @import "table";
 @import "topbar";
+@import "pagination";

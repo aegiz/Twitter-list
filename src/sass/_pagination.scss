@@ -1,0 +1,24 @@
+.pagination {
+	margin: 0;
+	text-align: center;
+}
+
+.pagination__list {
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	list-style: none;
+}
+
+.pagination__item {
+	display: inline-block;
+	margin: 0 10px;
+}
+
+.pagination__link {
+	text-decoration: none;
+	cursor: pointer;
+	& img {
+		display: block;
+	}
+}
