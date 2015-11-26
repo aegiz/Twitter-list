@@ -22,13 +22,15 @@
 
 .table-container {
 	position: relative;
+	overflow: hidden;
+	height: 75vh;
 }
 
 .table {
 	border-collapse: collapse;
-	margin-bottom: 3em;
 	width: 100%;
-	background: #fff;
+	height: 100%;
+	background: #FFFFFF;
 }
 
 .table__cell {
@@ -40,6 +42,7 @@
 .table__head {
 	border-bottom: 1px solid $border-grey;
 	border-left: 1px solid $border-grey;
+	height: 40px;
 }
 
 .table__cell--th {
@@ -62,6 +65,7 @@
 /* body */
 
 .table__body {
+	height: calc(100% - 40px);
 	.table__row {
 		border-top: 1px solid $border-grey;
 		border-bottom: 1px solid $border-grey;

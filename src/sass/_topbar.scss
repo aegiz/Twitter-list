@@ -1,3 +1,7 @@
+.topbar {
+	background-color: $middle-grey;
+}
+
 .filters {
 	display: table-cell;
 	vertical-align: middle;
@@ -14,7 +18,6 @@
 	vertical-align: middle;
 	padding: 31px 20px;
 	width: 33%;
-	background-color: $middle-grey;
 	color: $dark-grey;
 	opacity: 0.9;
 	text-align: center;
@@ -50,10 +53,9 @@
 .searchBar {
 	display: table-cell;
 	vertical-align: middle;
-	padding: 23px 15px 23px 9%;
+	padding: 0 15px 0 9%;
 	width: 30%;
 	text-align: right;
-	background-color: $middle-grey;
 	border-bottom: 1px solid $border-grey;
 }
 

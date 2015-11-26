@@ -29,7 +29,6 @@ angular.module('twitterListApp')
 				$timeout(function () {
 
 					var tbody = elem.querySelector('tbody');
-					var scrollBarWidth = tbody.offsetWidth - tbody.clientWidth;
 
 					// set css styles on thead and tbody
 
@@ -38,7 +37,6 @@ angular.module('twitterListApp')
 					angular.element(elem.querySelectorAll('thead')).css('display', 'block');
 					angular.element(elem.querySelectorAll('tbody')).css({
 							'display': 'block',
-							'height': "70vh" || 'inherit',
 							'overflow': 'auto'
 					});
 
@@ -55,15 +53,6 @@ angular.module('twitterListApp')
 							thElem.style.width = (i==0 ? '220px' : columnWidth + 'px');
 						}
 					});
-
-					// reduce width of last column by width of scrollbar
-					
-					/*if (scrollBarWidth > 0) {
-						// for some reason trimming the width by 2px lines everything up better
-						scrollBarWidth -= 2;
-						var lastColumn = elem.querySelector('tbody tr:first-child td:last-child');
-						lastColumn.style.width = (lastColumn.offsetWidth - scrollBarWidth) + 'px';
-					}*/
 				});
 			}
 		}

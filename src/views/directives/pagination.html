@@ -1,7 +1,7 @@
 <div class="pagination pull-right">
     <ul class="pagination__list">
         <li class="pagination__item pagination__item--left-arrow"
-            ng-class="{disabled: currentPage == 0}">
+            ng-class="{'pagination__item--disabled': currentPage == 0}">
             <a class="pagination__link"
                 ng-click="prevPage()">
                 <img src="assets/images/left-arrow.png" alt="left arrow">
@@ -9,13 +9,13 @@
         </li>
         <li class="pagination__item"
             ng-repeat="n in range(pagedItems.length)"
-            ng-class="{active: n == currentPage}"
+            ng-class="{'pagination__item--active': n == currentPage}"
             ng-click="setPage()">
             <a class="pagination__link"
                 ng-bind="n + 1">1</a>
         </li>
         <li class="pagination__item pagination__item--right-arrow"
-            ng-class="{disabled: currentPage == pagedItems.length - 1}">
+            ng-class="{'pagination__item--disabled': currentPage == pagedItems.length - 1}">
             <a class="pagination__link"
                 ng-click="nextPage()">
                 <img src="assets/images/right-arrow.png" alt="right arrow">

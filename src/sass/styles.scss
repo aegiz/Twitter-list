@@ -35,10 +35,13 @@ body {
 }
 
 .main-container {
-	margin: 5% auto;
-	width: 90%;
+	margin: 0;
+	padding: 5vh 5% 0 5%;
+	width: 100%;
+	height: 100vh;
 }
 
+@import "login";
 @import "inapp";
 @import "table";
 @import "topbar";
