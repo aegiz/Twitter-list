@@ -42,7 +42,6 @@ angular.module('twitterListApp')
 				pagedItems[Math.floor(i / itemsPerPage)].push(filteredItems[i]);
 			}
 		}
-		InappService.currentPage = 0;
 		InappService.pagedItems = pagedItems;
 	};
 

@@ -122,6 +122,7 @@ angular.module('twitterListApp')
 				that.updateListOfList(infos);
 				that.updateMatrix(infos);
 				that.actionStack.shift();
+				SearchService.reset(true);
 				if(that.actionStack.length !==0) {
 					// Do the next action
 					launchAction(0);

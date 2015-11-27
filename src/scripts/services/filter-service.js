@@ -7,6 +7,7 @@ angular.module('twitterListApp')
 		// Reset search
 		SearchService.reset(true);
 		// Update table value
+		InappService.currentPage = 0;
 		TableService.fillTable(value);
 	};
 }]);
