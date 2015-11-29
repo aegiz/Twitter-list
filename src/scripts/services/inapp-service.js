@@ -7,7 +7,7 @@ angular.module('twitterListApp')
 		* listOfLists: 
 		* This array hold all the infos relative to the lists created by the connected user
 		* Structure: listOfLists = [Object, Object, ...] where Object is a single list.
-		* A single list has these properties: {id: ,name:, user: Array }. 
+		* A single list has these properties: {id: ,name:, users: Array }. 
 		* ... Where users is an array of users contains in the list
 		* Role: listOfLists is handy when we have to calculate the score of a following (step performed during init and validation)
 		*/

@@ -143,7 +143,7 @@ angular.module('twitterListApp')
 	
 
 	/*
-	* Update the listOflist object
+	* Update the listOfLists object
     * @param {Object} usersToUpdate. The list of users to update.
     * (TODO : improve this function with the for loop - bad)
 	*/

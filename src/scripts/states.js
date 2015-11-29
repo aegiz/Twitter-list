@@ -70,6 +70,10 @@ angular.module('states', ['ui.router'])
 				templateUrl: 'directives/search.html', 
 				controller: 'SearchCtrl'
 			},
+			"options": {
+				templateUrl: 'directives/options.html', 
+				controller: 'OptionsCtrl'
+			},
 			"filters": {
 				templateUrl: 'directives/filters.html', 
 				controller: 'FiltersCtrl'

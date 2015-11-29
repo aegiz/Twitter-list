@@ -13,7 +13,7 @@
 				</th>
 				<th 
 					class="table__cell table__cell--th table__cell--list-name"
-					ng-repeat="list in listOfLists">
+					ng-repeat="list in listOfLists track by list.id">
 					{{list.name}}
 				</th>
 			</tr>
