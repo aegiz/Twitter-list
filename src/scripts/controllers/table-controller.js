@@ -5,12 +5,14 @@ angular.module('twitterListApp')
 	$scope.handleInputClick = function(infos, $event) {
 		infos.actionTodo = (infos.subscribed) ? "create" : "destroy";
 		TableService.addAction(infos);
-		var currentTarget = $($event.currentTarget);
-		currentTarget.attr("disabled", true);
-		currentTarget.parent().addClass("clicked");
+		var checkbox = $($event.currentTarget),
+			cell = $(checkbox).parent(),
+			row = cell.parent();
+		row.find(".checkbox").attr("disabled", true);
+		cell.addClass("clicked");
 		$timeout(function() {
-			currentTarget.attr("disabled", false);
-			currentTarget.parent().removeClass("clicked");
+			row.find(".checkbox").attr("disabled", false);
+			cell.removeClass("clicked");
 		}, 2500);
 	};
 }]);

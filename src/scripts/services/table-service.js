@@ -256,38 +256,17 @@ angular.module('twitterListApp')
 				getUsersInLists(data.lists).then(function(data) {
 					InappService.listOfLists = _.sortBy(data, function (obj) {return obj.name;}); // sort the list in alphabetical order
 					// Third step: get the last followings of the user (max: 200)
-					/* 
-						Strategy :
-						Due to Api rate limit on the GET friends/list request (15 calls every 15mins)
-						We distinguish two cases: 
-							- If the user has more than 2800 followings (15 * 200) we will chain the first 15calls and do the rest later.
-							- If the user has less than 2800 followings (the majority) we will chain all these calls.
-					*/
 					getTwitterInfos.get('/account/verify_credentials').then(function(data) {
 						var callToDo = Math.ceil((data.friends_count) / 200);
-						// If more than 2800 followings
-						if (callToDo > 15) {
-							getFollowings(15).then(function(userResult) {
-								// Fourth step: build the user object
-								InappService.users = _.flatten(userResult);
-								PaginationService.initializeUserNb(InappService.users.length);
-								// Fifth step: build the matrix and fill the table
-								that.initMatrix();
-								that.fillTable("noFilter");
-								$state.go('inapp.displayData');
-								/* TODO : indicate the user that we have to wait 15min now */
-							});
-						} else {
-							getFollowings(callToDo).then(function(userResult) {
-								// Fourth step: build the user object
-								InappService.users = _.flatten(userResult);
-								PaginationService.initializeUserNb(InappService.users.length);
-								// Fifth step: build the matrix and fill the table
-								that.initMatrix();
-								that.fillTable("noFilter");
-								$state.go('inapp.displayData');
-							});
-						}
+						getFollowings(callToDo).then(function(userResult) {
+							// Fourth step: build the user object
+							InappService.users = _.flatten(userResult);
+							PaginationService.initializeUserNb(InappService.users.length);
+							// Fifth step: build the matrix and fill the table
+							that.initMatrix();
+							that.fillTable("noFilter");
+							$state.go('inapp.displayData');
+						});
 					});
 				});
 			}
