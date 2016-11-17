@@ -13,6 +13,7 @@
 	width: 100%;
 }
 
+
 .category {
 	display: table-cell;
 	vertical-align: middle;
@@ -67,7 +68,7 @@
 		top: calc(50% - 8px);
 		left: 10px;
 		display: block;
-		background: url('/assets/images/search.svg') no-repeat center center;
+		background: url('../images/search.svg') no-repeat center center;
 		width: 16px;
 		height: 16px;
 	}
